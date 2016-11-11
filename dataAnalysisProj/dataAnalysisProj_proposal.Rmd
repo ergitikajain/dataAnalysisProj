@@ -1,0 +1,43 @@
+---
+title:  'Data Analysis Project: Knee Replacement Surgery'
+subtitle: 'Analysis Proposal'
+date: "November 10, 2016"
+output:
+  html_document:
+    toc: yes
+author:
+- Gitika Jain (gitikaj2)
+- Heather Sewak (hsewak2)
+- Ionel Miu (imiu2)
+- Jared Michael Coldert (jaredc2)
+---
+#  Knee Replacement Surgery Satisfaction Score
+
+## Description
+Knee Replacement Surgery uses IMPLANTS made from metal, high density polyethylene or ceramic to replace a diseased or worn out knee joint. 
+
+## Background information
+
+## Statement
+
+## Load Data in R
+
+```{r}
+dataset <- read.csv("knees.csv")
+
+# dimensions of the dataset
+dim(dataset) 
+
+# list the variables in dataset
+names(dataset)
+
+# list the structure of dataset
+str(dataset) 
+
+# list levels of factor Gender in dataset
+levels(dataset$Gender)
+
+# print first 10 rows and 5 columns of dataset
+head(dataset[, 1: 5], n = 10)
+```
+

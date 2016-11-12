@@ -25,21 +25,21 @@ We hope to determine the impact a particular surgeon or the type of implants use
 ## Load Data in R
 
 ```{r}
-dataset <- read.csv("knees.csv")
+knee <- read.csv("knees.csv")
 
 # dimensions of the dataset
-dim(dataset) 
+dim(knee) 
 
 # list the variables in dataset
-names(dataset)
+names(knee)
 
 # list the structure of dataset
-str(dataset) 
+str(knee) 
 
 # list levels of factor Gender in dataset
-levels(dataset$Gender)
+levels(knee$Gender)
 
 # print first 10 rows and 5 columns of dataset
-head(dataset[, 1: 5], n = 10)
+head(knee[, 1: 5], n = 10)
 ```
 

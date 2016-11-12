@@ -14,30 +14,32 @@ author:
 #  Knee Replacement Surgery Satisfaction Score
 
 ## Description
-Knee Replacement Surgery uses IMPLANTS made from metal, high density polyethylene or ceramic to replace a diseased or worn out knee joint. 
+Knee Replacement Surgery uses IMPLANTS made from metal and high density polyethylene to replace a diseased or worn out knee joint.  This dataset contains the details of a patient's knee replacement surgery.  The data includes the operating physician (converted to an integer value), anthropomorphic data about the patient, if computer navigation was utilized, the type of implants they received and two outcome metrics.  The first metric is comprised of several measurements indicating how well the surgeon believes the knee is functioning after surgery.  The second metric is a more subjective score measuring how well the patient is able to carry out daily activities.   
 
 ## Background information
+This data has been collected from a Southern California Hospital in collaboration with the Shiley Center for Orthopedic Research.  The data is used for both clinical research and postoperative monitoring of implant survivorship.  All patient specific information has been removed from the data so it adheres to the Health Insurance Portability and Accountability Act (HIPAA).
 
 ## Statement
+We hope to determine the impact a particular surgeon or the type of implants used has on the patient's outcome after surgery.  We are also interested in exploring the potential relationship between anthropomorphic factors and the patient's postoperative satisfaction.  Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores.
 
 ## Load Data in R
 
 ```{r}
-dataset <- read.csv("knees.csv")
+knee <- read.csv("knees.csv")
 
 # dimensions of the dataset
-dim(dataset) 
+dim(knee) 
 
 # list the variables in dataset
-names(dataset)
+names(knee)
 
 # list the structure of dataset
-str(dataset) 
+str(knee) 
 
 # list levels of factor Gender in dataset
-levels(dataset$Gender)
+levels(knee$Gender)
 
 # print first 10 rows and 5 columns of dataset
-head(dataset[, 1: 5], n = 10)
+head(knee[, 1: 5], n = 10)
 ```
 

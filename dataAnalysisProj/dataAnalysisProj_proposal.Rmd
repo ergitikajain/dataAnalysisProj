@@ -11,16 +11,19 @@ author:
 - Ionel Miu (imiu2)
 - Jared Michael Coldert (jaredc2)
 ---
-#  Knee Replacement Surgery Satisfaction Score
+#  Knee Replacement Surgery Outcome
 
 ## Description
-Knee Replacement Surgery uses IMPLANTS made from metal and high density polyethylene to replace a diseased or worn out knee joint.  This dataset contains the details of a patient's knee replacement surgery.  The data includes the operating physician (converted to an integer value), anthropomorphic data about the patient, if computer navigation was utilized, the type of implants they received and two outcome metrics.  The first metric is comprised of several measurements indicating how well the surgeon believes the knee is functioning after surgery.  The second metric is a more subjective score measuring how well the patient is able to carry out daily activities.   
+Knee Replacement Surgery uses implants made from metal and high density polyethylene to replace a diseased or worn out knee joint.  This dataset contains the details of a patient's knee replacement surgery.  The data includes the operating physician (converted to an integer value), anthropomorphic data about the patient, if computer navigation was utilized, the type of implants they received and two outcome metrics.  The first metric is comprised of several measurements indicating how well the surgeon believes the knee is functioning after surgery.  The second metric is a more subjective score measuring how well the patient is able to carry out daily activities.   
 
 ## Background information
 This data has been collected from a Southern California Hospital in collaboration with the Shiley Center for Orthopedic Research.  The data is used for both clinical research and postoperative monitoring of implant survivorship.  All patient specific information has been removed from the data so it adheres to the Health Insurance Portability and Accountability Act (HIPAA).
 
 ## Statement
 We hope to determine the impact a particular surgeon or the type of implants used has on the patient's outcome after surgery.  We are also interested in exploring the potential relationship between anthropomorphic factors and the patient's postoperative satisfaction.  Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores.
+
+Here we may consider KneeScore_Surgeon or KennScore_Patient as Response and Age, Gendar, Weight, Height, BMI, Race, Side, Manu
+facturer as predictors. Gendar, Race, Side and Manufacturer are some of the categorical predictors and Age, Height, Weight and BMI are numerical predictors.
 
 ## Load Data in R
 

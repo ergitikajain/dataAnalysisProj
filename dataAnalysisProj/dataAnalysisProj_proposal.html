@@ -98,6 +98,7 @@ button.code-folding-btn:focus {
 </style>
 
 
+
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
@@ -131,7 +132,7 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#knee-replacement-surgery-satisfaction-score">Knee Replacement Surgery Satisfaction Score</a><ul>
+<li><a href="#knee-replacement-surgery-outcome">Knee Replacement Surgery Outcome</a><ul>
 <li><a href="#description">Description</a></li>
 <li><a href="#background-information">Background information</a></li>
 <li><a href="#statement">Statement</a></li>
@@ -140,11 +141,11 @@ $(document).ready(function () {
 </ul>
 </div>
 
-<div id="knee-replacement-surgery-satisfaction-score" class="section level1">
-<h1>Knee Replacement Surgery Satisfaction Score</h1>
+<div id="knee-replacement-surgery-outcome" class="section level1">
+<h1>Knee Replacement Surgery Outcome</h1>
 <div id="description" class="section level2">
 <h2>Description</h2>
-<p>Knee Replacement Surgery uses IMPLANTS made from metal and high density polyethylene to replace a diseased or worn out knee joint. This dataset contains the details of a patient’s knee replacement surgery. The data includes the operating physician (converted to an integer value), anthropomorphic data about the patient, if computer navigation was utilized, the type of implants they received and two outcome metrics. The first metric is comprised of several measurements indicating how well the surgeon believes the knee is functioning after surgery. The second metric is a more subjective score measuring how well the patient is able to carry out daily activities.</p>
+<p>Knee Replacement Surgery uses implants made from metal and high density polyethylene to replace a diseased or worn out knee joint. This dataset contains the details of a patient’s knee replacement surgery. The data includes the operating physician (converted to an integer value), anthropomorphic data about the patient, if computer navigation was utilized, the type of implants they received and two outcome metrics. The first metric is comprised of several measurements indicating how well the surgeon believes the knee is functioning after surgery. The second metric is a more subjective score measuring how well the patient is able to carry out daily activities.</p>
 </div>
 <div id="background-information" class="section level2">
 <h2>Background information</h2>
@@ -153,6 +154,7 @@ $(document).ready(function () {
 <div id="statement" class="section level2">
 <h2>Statement</h2>
 <p>We hope to determine the impact a particular surgeon or the type of implants used has on the patient’s outcome after surgery. We are also interested in exploring the potential relationship between anthropomorphic factors and the patient’s postoperative satisfaction. Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores.</p>
+<p>Here we may consider KneeScore_Surgeon or KennScore_Patient as Response and Age, Gendar, Weight, Height, BMI, Race, Side, Manu facturer as predictors. Gendar, Race, Side and Manufacturer are some of the categorical predictors and Age, Height, Weight and BMI are numerical predictors.</p>
 </div>
 <div id="load-data-in-r" class="section level2">
 <h2>Load Data in R</h2>
@@ -232,6 +234,7 @@ head(knee[, 1: 5], n = 10)</code></pre>
 $(document).ready(function () {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
+
 
 </script>
 

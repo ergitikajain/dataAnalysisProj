@@ -9,7 +9,7 @@ author:
 - Gitika Jain (gitikaj2)
 - Heather Sewak (hsewak2)
 - Ionel Miu (imiu2)
-- Jared Michael Coldert (jaredc2)
+- Jared Michael Colbert (jaredc2)
 ---
 #  Knee Replacement Surgery Outcome
 
@@ -22,7 +22,11 @@ This data has been collected from a Southern California Hospital in collaboratio
 ## Statement
 We hope to determine the impact a particular surgeon or the type of implants used has on the patient's outcome after surgery.  We are also interested in exploring the potential relationship between anthropomorphic factors and the patient's postoperative satisfaction.  Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores. Nevertheless, we keep our option opened to investigate other aspects that were not 'visibile' or never thought about it but might reveal themselfs as we move on with the project.
 
+<<<<<<< HEAD
 Here we may consider *KneeScore\_Surgeon* or *KennScore\_Patient* as response and *Age, Gendar, Weight, Height, BMI, Race, Side, Manufacturer* as predictors. *Gendar, Race, Side and Manufacturer* are some of the categorical predictors and *Age, Height, Weight and BMI* are numerical predictors.
+=======
+Here we may consider KneeScore_Surgeon or KneeScore_Patient as Response and Age, Gender, Weight, Height, BMI, Race, Side, Manufacturer, and Implant Type as predictors. Gender, Race, Side and Manufacturer are some of the categorical predictors and Age, Height, Weight and BMI are numerical predictors.
+>>>>>>> eab2094d805a9fbcb26b2d6feb6bd3f48f081a9c
 
 ## Load Data in R
 

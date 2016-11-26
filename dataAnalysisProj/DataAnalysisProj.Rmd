@@ -45,3 +45,63 @@ levels(knee$Gender)
 head(knee[, 1: 5], n = 10)
 ```
 
+###Knee Score Surgeon
+
+```{r}
+knee_model = lm(KneeScore_Surgeon ~ ., data = knee)
+summary(knee_model)
+
+knee_model_aic = step(knee_model, direction = "backward", trace = 0)
+summary(knee_model_aic)$call
+
+knee_model_bic = step(knee_model, direction = "backward", trace = 0)
+summary(knee_model_bic)$call
+```
+
+```{r}
+anova(knee_model_aic, knee_model)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot(fitted(knee_model_aic), resid(knee_model_aic), col = "magenta", pch = 20, cex = 1.5, xlab = "Fitted", ylab = "Residuals")
+abline(h=0, lwd = 2, col = "olivedrab1")
+
+qqnorm(resid(knee_model_aic), main = "Normal QQ Plot - Knee Model AIC", col = "purple4", pch = 20, cex = 1.5)
+qqline(resid(knee_model_aic), col = "Orange", lwd = 3)
+
+library(lmtest)
+bptest(knee_model_aic)
+
+shapiro.test(resid(knee_model_aic))
+
+```
+
+###Knee Score Patient
+```{r}
+patient_model = lm(KneeScore_Patient ~ ., data = knee)
+summary(patient_model)
+
+patient_model_aic = step(patient_model, direction = "backward", trace = 0)
+summary(patient_model_aic)$call
+
+patient_model_bic = step(patient_model, direction = "backward", trace = 0)
+summary(patient_model_bic)$call
+```
+
+```{r}
+anova(patient_model_aic, patient_model)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot(fitted(patient_model_aic), resid(patient_model_aic), col = "green", pch = 20, cex = 1.5, xlab = "Fitted", ylab = "Residuals")
+abline(h=0, lwd = 2, col = "black")
+
+qqnorm(resid(patient_model_aic), main = "Normal QQ Plot - Patient Model AIC", col = "red", pch = 20, cex = 1.5)
+qqline(resid(patient_model_aic), col = "navy", lwd = 3)
+
+library(lmtest)
+bptest(patient_model_aic)
+
+shapiro.test(resid(patient_model_aic))
+
+```

@@ -1,0 +1,65 @@
+---
+title: "Jared's Models"
+author: "Jared Colbert"
+date: "11/30/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(lmtest)
+```
+
+```{r}
+knees = read.csv('knees.csv')
+knees$Surgeon = as.factor(knees$Surgeon)
+```
+
+```{r}
+evaluate = function(model){
+  print(shapiro.test(resid(model)))
+  print(bptest(model))
+  print(paste('R.Squared', summary(model)$r.squared))
+  print(paste('Adj.R.Squared', summary(model)$adj.r.squared))
+  
+  qqnorm(resid(model), main = "Q-Q Plot", col = "dodgerblue")
+  qqline(resid(model), col = "darkorange", lwd = 2)
+}
+```
+
+```{r}
+## BruteForce Model - Quick to render
+model_one = lm(KneeScore_Patient~1+Age:Year+Weight:Age+Height:Year+Height:Age+Height:Weight+BMI:Age+KneeScore_Surgeon:BMI+TibialInsertWidth:Year+TibialInsertWidth:KneeScore_Surgeon+PatellaDiameter:Age+PatellaDiameter:Height+PatellaDiameter:TibialInsertWidth, data = knees)
+evaluate(model_one)
+```
+
+```{r}
+model_two = lm(KneeScore_Patient ~ Surgeon * Side * BMI * TibialInsertModel * Diagnosis, data = knees)
+evaluate(model_two)
+```
+
+```{r}
+model_three = lm(KneeScore_Patient ~ Surgeon * Side * BMI * Diagnosis, data = knees)
+evaluate(model_three)
+```
+
+```{r}
+model_four = lm(KneeScore_Patient ~ GPS * Manufacturer * TibialInsertModel * PatellaDiameter, data = knees)
+evaluate(model_four)
+```
+
+```{r}
+model_five = lm(KneeScore_Patient ~ GPS * Manufacturer * TibialInsertModel * PatellaDiameter, data = knees)
+evaluate(model_five)
+```
+
+```{r}
+model_six = lm(KneeScore_Patient ~ .*., data = knees)
+evaluate(model_six)
+```
+
+```{r}
+aic_model_six = step(model_six, direction = 'both', trace = 0)
+```
+
+

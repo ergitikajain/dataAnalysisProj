@@ -1,4 +1,4 @@
-knee <- read.csv("/Users/gitika.jain/Downloads/data_analysis_group_proj_proposal/knees.csv")
+knee <- read.csv("knees.csv")
 
 # dimensions of the dataset
 dim(knee) 
@@ -94,7 +94,7 @@ summary(model_pat_both_bic)$adj.r.squared
 
 
 
-
+library("leaps")
 all_mod = summary(regsubsets(KneeScore_Surgeon ~ ., data = knee,really.big=T))
 all_mod$adjr2
 (best_r2_ind = which.max(all_mod$adjr2))

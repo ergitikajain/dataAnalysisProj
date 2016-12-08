@@ -26,9 +26,62 @@ Here we may consider *KneeScore\_Surgeon* or *KennScore\_Patient* as response an
 
 ## Load Data in R
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(lmtest)
+library(leaps)
+purple = '#772299'; green = '#3FE500'
+red = '#E50000'; lightblue = '#229999';
+blue = '#336699'
+```
+
+```{r, eval=TRUE}
+plots = function(model) {
+  par(mfcol=c(2,2))
+  qqnorm(resid(model), col = red, pch = 16)
+  qqline(resid(model), col = lightblue, lwd = 2)
+  
+  plot(fitted(model), resid(model), xlab = 'Fitted Values', ylab = 'Residuals', main = 'Fitted vs. Residuals Plot', col = purple, pch = 16)
+  abline(h = 0, col = green, lwd = 2)
+  
+  hist(resid(model), col = blue, main = 'Histogram of Residuals', xlab = 'Residuals')
+}
+
+evaluate = function(model){
+  
+  # Run each of the tests
+  shapiroTest = shapiro.test(resid(model))
+  bpTest = bptest(model)
+  rSquared = summary(model)$r.squared
+  adjRSquared = summary(model)$adj.r.squared
+  loocv = sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
+  large_lev = sum(hatvalues(model) > 2 * mean(hatvalues(model)))
+  # gives percentage of large residuals (should be less than 5%)
+  large_resid = sum(rstandard(model)[abs(rstandard(model)) > 2]) / length(resid(model)) 
+  
+  # Collect tests in dataframe
+  values = data.frame(Result = c(prettyNum(shapiroTest$p.value), prettyNum(bpTest$p.value), prettyNum(rSquared), prettyNum(adjRSquared),        prettyNum(loocv), prettyNum(large_lev), prettyNum(large_resid))) 
+  rowNames = data.frame(Test = c('Shapiro Wilk pvalue', 'Breusch-Pagan pvalue', 'R Squared', 'Adj R Squared', 'Cross Validation', 'Large Leverages', 'Large Residuals'))
+
+  summary_output = cbind(rowNames, values)
+  # Add dataframe to matrix
+  show(summary_output)
+  plots(model)
+}
+
+removeLargeHatValues = function(model, data){
+  values = hatvalues(model)
+  index_ = which(values > (2 * mean(values)))
+  newData = data[-c(index_),]
+  return(newData)
+}
+```
+
+
 ```{r}
 knee <- read.csv("knees.csv")
-
+knee$Surgeon = as.factor(knee$Surgeon)
+knee$Year = as.factor(knee$Year)
 # dimensions of the dataset
 dim(knee) 
 
@@ -98,6 +151,22 @@ anova(knee_model_bic, knee_model_aic, knee_model)
 
 **Comments:** Corelating all the above, so far, *knee_model_aic* seems to offer the best model to analyze Surgeon Score
 
+```{r}
+evaluate(knee_model_bic)
+```
+
+```{r}
+new_data = removeLargeHatValues(knee_model_bic, knee)
+knee_two = lm(KneeScore_Surgeon ~ ., data = new_data)
+evaluate(knee_two)
+```
+
+
+
+
+
+
+
 
 
 ###Investigate for a model to analyze Patient score response
@@ -155,6 +224,18 @@ anova(knee_model_bic, knee_model_aic, knee_model)
 **Comments:** Corelating all the above, so far, *knee_model_aic* seems to offer the best model.
 
 
+```{r}
+evaluate(knee_model_bic)
+```
+
+```{r}
+new_data = removeLargeHatValues(knee_model_bic, knee)
+knee_two = lm(KneeScore_Patient ~ ., data = new_data)
+evaluate(knee_two)
+```
+
+
+
 ### Correlation between KneeScore_Patient and KneeScore_Surgeon
 
 ```{r}
@@ -179,3 +260,9 @@ hist(knee$KneeScore_Surgeon)
 hist(knee$KneeScore_Patient)
 ```
 
+##### Model selection
+```{r}
+lm(formula = KneeScore_Patient ~ Year + Age + Gender + Weight + 
+    Height + Race + KneeScore_Surgeon + TibialInsertWidth + PatellaDiameter, 
+    data = knee)
+```

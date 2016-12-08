@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(lmtest)
+library(leaps)
 purple = '#772299'; green = '#3FE500'
 red = '#E50000'; lightblue = '#229999';
 blue = '#336699'

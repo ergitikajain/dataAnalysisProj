@@ -43,6 +43,7 @@ knee$Year = as.factor(knee$Year)
 ### Functions for model evaluation
 
 ```{r}
+#Function to plot various plots as QQPlot, Fitted vs Residual Plot.
 plots = function(model) {
   par(mfcol=c(2,2))
   qqnorm(resid(model), col = red, pch = 16)
@@ -52,6 +53,7 @@ plots = function(model) {
   hist(resid(model), col = blue, main = 'Histogram of Residuals', xlab = 'Residuals')
 }
 
+#Function to calculate various statistics which we use to evaluate the model
 evaluate = function(model){
   # Run each of the tests
   lambda = 1.000001 # this is a hack so the function will return a CrossValidation score - HatValues of 1.0 are causing a division by zero error.
@@ -83,7 +85,7 @@ removeInfluential = function(model, data){
   return(newData)
 }
 
-IdentifyInfluential = function(model, data){
+identifyInfluential = function(model, data){
   large_lev_index = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
   rStandard = abs(rstandard(model))
@@ -91,6 +93,7 @@ IdentifyInfluential = function(model, data){
   index_ = intersect(intersect(large_lev_index, cooks), rStandardIndex)
   return(index_)
 }
+
 removeLargeHatValues = function(model, data){
   largeHat = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   newData = data[-largeHat, ]
@@ -103,6 +106,9 @@ prediction_accuracy = function(model, data, margin) {
   prediction = predict(model, newdata = data)
   return(sum(prediction < upper & lower < prediction)) / length(prediction)
 }
+
+rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
+
 ```
 
 ### Knee Score Surgeon
@@ -110,19 +116,19 @@ prediction_accuracy = function(model, data, margin) {
 Begin by fitting a full additive model as a baseline and evaluating.
 
 ```{r}
-full_additive_model = lm(KneeScore_Surgeon ~ ., data = knee)
-evaluate(full_additive_model)
+surgeon_full_additive_model = lm(KneeScore_Surgeon ~ ., data = knee)
+evaluate(surgeon_full_additive_model)
 ```
 
 The baseline model has many large leverage values, which, upon inspection may be coming from several of the implant fields.  Perhaps removing the suspect implant predictors will help improve the model.
 
 ```{r}
-model_eight = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
-evaluate(model_eight)
+surgeon_model_eight = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
+evaluate(surgeon_model_eight)
 ```
 
 ```{r}
-anova(model_eight, full_additive_model)
+anova(surgeon_model_eight, surgeon_full_additive_model)
 ```
 
 While removing the predictors doesn't yeild a definatively better model at a reasonable $\alpha$, it does increase Adjusted $R^2$ and slightly improves the cross validation score.
@@ -130,10 +136,10 @@ While removing the predictors doesn't yeild a definatively better model at a rea
 Utilize a Bayesian Information Criterion approach and evaluate the selected model.
 
 ```{r}
-n = length(resid(full_additive_model))
-model_back_bic = step(full_additive_model, direction = "backward", k = log(n), trace = 0)
-evaluate(model_back_bic)
-anova(model_back_bic, full_additive_model)
+n = length(resid(surgeon_full_additive_model))
+surgeon_model_back_bic = step(surgeon_full_additive_model, direction = "backward", k = log(n), trace = 0)
+evaluate(surgeon_model_back_bic)
+anova(surgeon_model_back_bic, surgeon_full_additive_model)
 ```
 
 The resulting BIC model scores marginally better in Cross Validation though the anova results clearly prefer the full additive model.
@@ -146,16 +152,15 @@ sample_idx = sample(1:nrow(knee), 1500)
 train_data = knee[sample_idx, ]
 test_data = knee[-sample_idx, ]
 
-rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
 
-full_test = rmse(test_data$KneeScore_Surgeon, predict(full_additive_model, test_data))
-full_train = rmse(train_data$KneeScore_Surgeon, predict(full_additive_model, train_data))
+full_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_full_additive_model, test_data))
+full_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_full_additive_model, train_data))
 
-test_mod_8 = rmse(test_data$KneeScore_Surgeon, predict(model_eight, test_data))
-train_mod_8 = rmse(train_data$KneeScore_Surgeon, predict(model_eight, train_data))
+test_mod_8 = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_eight, test_data))
+train_mod_8 = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_eight, train_data))
 
-bic_test = rmse(test_data$KneeScore_Surgeon, predict(model_back_bic, test_data))
-bic_train = rmse(train_data$KneeScore_Surgeon, predict(model_back_bic, train_data))
+bic_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_back_bic, test_data))
+bic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_back_bic, train_data))
 ```
 
 | Model        | Train RMSE         | Test RMSE       |
@@ -169,9 +174,9 @@ bic_train = rmse(train_data$KneeScore_Surgeon, predict(model_back_bic, train_dat
 Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Leverage`, `Large Cook's Distance` and `Large RStandard` values.
 
 ```{r}
-new_dataframe = removeInfluential(model_eight, knee)
-model_nine = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
-evaluate(model_nine)
+new_dataframe = removeInfluential(surgeon_model_eight, knee)
+surgeon_model_nine = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
+evaluate(surgeon_model_nine)
 ```
 
 This does seem to be of moderate benefit in relation to Adjusted $R^2$ and Cross Validation.
@@ -179,17 +184,17 @@ This does seem to be of moderate benefit in relation to Adjusted $R^2$ and Cross
 We will evaluate the same model one again after removing the identified large hat values.
 
 ```{r}
-remove_hat_dataframe = removeLargeHatValues(model_nine, new_dataframe)
-model_ten = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
-evaluate(model_ten)
+remove_hat_dataframe = removeLargeHatValues(surgeon_model_nine, new_dataframe)
+surgeon_model_ten = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
+evaluate(surgeon_model_ten)
 ```
 
 Removing the large hat values decreased the Cross Validation score.  Perhaps we can find a better model by running BIC on the modified dataframe.
 
 ```{r}
-n = length(resid(model_ten))
-model_10_bic = step(model_ten, direction = "backward", k = log(n), trace = 0)
-evaluate(model_10_bic)
+n = length(resid(surgeon_model_ten))
+surgeon_model_10_bic = step(surgeon_model_ten, direction = "backward", k = log(n), trace = 0)
+evaluate(surgeon_model_10_bic)
 ```
 
 Despite the reduction in leveraged values the selected model is no better than preceeding models.
@@ -199,11 +204,11 @@ sample_idx_two = sample(1:nrow(remove_hat_dataframe), 1300)
 train_data_two = remove_hat_dataframe[sample_idx_two, ]
 test_data_two = remove_hat_dataframe[-sample_idx_two, ]
 
-test_mod_10 = rmse(test_data_two$KneeScore_Surgeon, predict(model_ten, train_data_two))
-train_mod_10 = rmse(train_data_two$KneeScore_Surgeon, predict(model_ten, train_data_two))
+test_mod_10 = rmse(test_data_two$KneeScore_Surgeon, predict(surgeon_model_ten, train_data_two))
+train_mod_10 = rmse(train_data_two$KneeScore_Surgeon, predict(surgeon_model_ten, train_data_two))
 
-test_10_bic = rmse(test_data_two$KneeScore_Surgeon, predict(model_10_bic, train_data_two))
-train_10_bic = rmse(train_data_two$KneeScore_Surgeon, predict(model_10_bic, train_data_two))
+test_10_bic = rmse(test_data_two$KneeScore_Surgeon, predict(surgeon_model_10_bic, train_data_two))
+train_10_bic = rmse(train_data_two$KneeScore_Surgeon, predict(surgeon_model_10_bic, train_data_two))
 ```
 
 | Model         | Train RMSE         | Test RMSE       |
@@ -215,57 +220,57 @@ train_10_bic = rmse(train_data_two$KneeScore_Surgeon, predict(model_10_bic, trai
 ## Appendix
 ### Knee Score Surgeon
 ```{r}
-model = lm(KneeScore_Surgeon ~. , data = knee)
-model_back_aic = step(model, direction = "backward", trace = 0)
-model_for_aic = step(model, direction = "forward", trace = 0)
-model_both_aic = step(model, direction = "both", trace = 0)
+surgeon_model = lm(KneeScore_Surgeon ~. , data = knee)
+surgeon_model_back_aic = step(surgeon_model, direction = "backward", trace = 0)
+surgeon_model_for_aic = step(surgeon_model, direction = "forward", trace = 0)
+surgeon_model_both_aic = step(surgeon_model, direction = "both", trace = 0)
 
-n = length(resid(model))
-model_back_bic = step(model, direction = "backward", k = log(n), trace = 0)
-model_for_bic = step(model, direction = "forward", k = log(n), trace = 0)
-model_both_bic = step(model, direction = "both", k = log(n), trace = 0)
+n = length(resid(surgeon_model))
+surgeon_model_back_bic = step(surgeon_model, direction = "backward", k = log(n), trace = 0)
+surgeon_model_for_bic = step(surgeon_model, direction = "forward", k = log(n), trace = 0)
+surgeon_model_both_bic = step(surgeon_model, direction = "both", k = log(n), trace = 0)
 ```
 
 ```{r}
-evaluate(model)
+evaluate(surgeon_model)
 ```
 
 ```{r}
-evaluate(model_back_aic)
+evaluate(surgeon_model_back_aic)
 ```
 
 ```{r}
-evaluate(model_for_aic)
+evaluate(surgeon_model_for_aic)
 ```
 
 ```{r}
-evaluate(model_both_aic)
+evaluate(surgeon_model_both_aic)
 ```
 
 ```{r}
 ## Adj.R.Squared: 0.24 - CrossValidation: 16.9
-evaluate(model_back_bic)
+evaluate(surgeon_model_back_bic)
 ```
 
 ```{r}
-evaluate(model_for_bic)
+evaluate(surgeon_model_for_bic)
 ```
 
 ```{r}
-evaluate(model_both_bic)
+evaluate(surgeon_model_both_bic)
 ```
 
 ```{r}
 ## Remove large leverages
-new_data = removeInfluential(model, knee)
-model_without_large_leverages = lm(KneeScore_Surgeon ~ ., data = new_data)
-evaluate(model_without_large_leverages)
+new_data = removeInfluential(surgeon_model, knee)
+surgeon_model_without_large_leverages = lm(KneeScore_Surgeon ~ ., data = new_data)
+evaluate(surgeon_model_without_large_leverages)
 ```
 
 Removing the records with large hat values and refitting simply introduces more large hat values.  What is unique about these rows of data?
 
 ```{r}
-which(hatvalues(model) == 1.0)
+which(hatvalues(surgeon_model) == 1.0)
 print(knee[17,])
 print(knee[240,])
 print(knee[638,])
@@ -277,8 +282,8 @@ Each of these has a suspect factor entry.  Perhaps the entry only occurs infrequ
 Try pulling the suspect columns out of the LM and see what happens.
 
 ```{r}
-model_nine = lm(KneeScore_Surgeon ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)
-evaluate(model_nine)
+surgeon_model_nine = lm(KneeScore_Surgeon ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)
+evaluate(surgeon_model_nine)
 ```
 
 ### Knee Score Patient
@@ -286,19 +291,19 @@ evaluate(model_nine)
 Begin by fitting a full additive model as a baseline and evaluating.
 
 ```{r}
-full_additive_model = lm(KneeScore_Patient ~ ., data = knee)
-evaluate(full_additive_model)
+pat_full_additive_model = lm(KneeScore_Patient ~ ., data = knee)
+evaluate(pat_full_additive_model)
 ```
 
 The baseline model has many large leverage values, which, upon inspection may be coming from several of the implant fields.  Perhaps removing the suspect implant predictors will help improve the model.
 
 ```{r}
-model_eight = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
-evaluate(model_eight)
+pat_model_eight = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
+evaluate(pat_model_eight)
 ```
 
 ```{r}
-anova(model_eight, full_additive_model)
+anova(pat_model_eight, pat_full_additive_model)
 ```
 
 While removing the predictors doesn't yeild a definatively better model at a reasonable $\alpha$, it does increase Adjusted $R^2$ and slightly improves the cross validation score.
@@ -306,10 +311,10 @@ While removing the predictors doesn't yeild a definatively better model at a rea
 Utilize a Bayesian Information Criterion approach and evaluate the selected model.
 
 ```{r}
-n = length(resid(full_additive_model))
-model_back_bic = step(full_additive_model, direction = "backward", k = log(n), trace = 0)
-evaluate(model_back_bic)
-anova(model_back_bic, full_additive_model)
+n = length(resid(pat_full_additive_model))
+pat_model_back_bic = step(pat_full_additive_model, direction = "backward", k = log(n), trace = 0)
+evaluate(pat_model_back_bic)
+anova(pat_model_back_bic, pat_full_additive_model)
 ```
 
 The resulting BIC model scores marginally better in Cross Validation though the anova results clearly prefer the full additive model.
@@ -324,14 +329,14 @@ test_data = knee[-sample_idx, ]
 
 rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
 
-full_test = rmse(test_data$KneeScore_Patient, predict(full_additive_model, test_data))
-full_train = rmse(train_data$KneeScore_Patient, predict(full_additive_model, train_data))
+pat_full_test = rmse(test_data$KneeScore_Patient, predict(pat_full_additive_model, test_data))
+pat_full_train = rmse(train_data$KneeScore_Patient, predict(pat_full_additive_model, train_data))
 
-test_mod_8 = rmse(test_data$KneeScore_Patient, predict(model_eight, test_data))
-train_mod_8 = rmse(train_data$KneeScore_Patient, predict(model_eight, train_data))
+pat_test_mod_8 = rmse(test_data$KneeScore_Patient, predict(pat_model_eight, test_data))
+pat_train_mod_8 = rmse(train_data$KneeScore_Patient, predict(pat_model_eight, train_data))
 
-bic_test = rmse(test_data$KneeScore_Patient, predict(model_back_bic, test_data))
-bic_train = rmse(train_data$KneeScore_Patient, predict(model_back_bic, train_data))
+pat_bic_test = rmse(test_data$KneeScore_Patient, predict(pat_model_back_bic, test_data))
+pat_bic_train = rmse(train_data$KneeScore_Patient, predict(pat_model_back_bic, train_data))
 ```
 
 | Model        | Train RMSE         | Test RMSE       |
@@ -345,9 +350,9 @@ The additive model with all predictors has the best RMSE values.
 Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Leverage`, `Large Cook's Distance` and `Large RStandard` values.
 
 ```{r}
-new_dataframe = removeInfluential(model_eight, knee)
-model_nine = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
-evaluate(model_nine)
+new_dataframe = removeInfluential(pat_model_eight, knee)
+pat_model_nine = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
+evaluate(pat_model_nine)
 ```
 
 This does seem to be of moderate benefit in relation to Adjusted $R^2$ and Cross Validation.
@@ -355,17 +360,17 @@ This does seem to be of moderate benefit in relation to Adjusted $R^2$ and Cross
 We will evaluate the same model one again after removing the identified large hat values.
 
 ```{r}
-remove_hat_dataframe = removeLargeHatValues(model_nine, new_dataframe)
-model_ten = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
-evaluate(model_ten)
+remove_hat_dataframe = removeLargeHatValues(pat_model_nine, new_dataframe)
+pat_model_ten = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
+evaluate(pat_model_ten)
 ```
 
 Removing the large hat values decreased the Cross Validation score.  Perhaps we can find a better model by running BIC on the modified dataframe.
 
 ```{r}
-n = length(resid(model_ten))
-model_10_bic = step(model_ten, direction = "backward", k = log(n), trace = 0)
-evaluate(model_10_bic)
+n = length(resid(pat_model_ten))
+pat_model_10_bic = step(pat_model_ten, direction = "backward", k = log(n), trace = 0)
+evaluate(pat_model_10_bic)
 ```
 
 Despite the reduction in leveraged values the selected model is no better than preceeding models.
@@ -375,11 +380,11 @@ sample_idx_two = sample(1:nrow(remove_hat_dataframe), 1300)
 train_data_two = remove_hat_dataframe[sample_idx_two, ]
 test_data_two = remove_hat_dataframe[-sample_idx_two, ]
 
-test_mod_10 = rmse(test_data_two$KneeScore_Patient, predict(model_ten, train_data_two))
-train_mod_10 = rmse(train_data_two$KneeScore_Patient, predict(model_ten, train_data_two))
+test_mod_10 = rmse(test_data_two$KneeScore_Patient, predict(pat_model_ten, train_data_two))
+train_mod_10 = rmse(train_data_two$KneeScore_Patient, predict(pat_model_ten, train_data_two))
 
-test_10_bic = rmse(test_data_two$KneeScore_Patient, predict(model_10_bic, train_data_two))
-train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(model_10_bic, train_data_two))
+test_10_bic = rmse(test_data_two$KneeScore_Patient, predict(pat_model_10_bic, train_data_two))
+train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(pat_model_10_bic, train_data_two))
 ```
 
 | Model         | Train RMSE         | Test RMSE       |
@@ -392,57 +397,57 @@ Interestingly the models fit on the dataset without leverages fares worse on tes
 ## Appendix
 ### Knee Score Patient
 ```{r}
-model = lm(KneeScore_Patient ~. , data = knee)
-model_back_aic = step(model, direction = "backward", trace = 0)
-model_for_aic = step(model, direction = "forward", trace = 0)
-model_both_aic = step(model, direction = "both", trace = 0)
+pat_model = lm(KneeScore_Patient ~. , data = knee)
+pat_model_back_aic = step(pat_model, direction = "backward", trace = 0)
+pat_model_for_aic = step(pat_model, direction = "forward", trace = 0)
+pat_model_both_aic = step(pat_model, direction = "both", trace = 0)
 
-n = length(resid(model))
-model_back_bic = step(model, direction = "backward", k = log(n), trace = 0)
-model_for_bic = step(model, direction = "forward", k = log(n), trace = 0)
-model_both_bic = step(model, direction = "both", k = log(n), trace = 0)
+n = length(resid(pat_model))
+pat_model_back_bic = step(pat_model, direction = "backward", k = log(n), trace = 0)
+pat_model_for_bic = step(pat_model, direction = "forward", k = log(n), trace = 0)
+pat_model_both_bic = step(pat_model, direction = "both", k = log(n), trace = 0)
 ```
 
 ```{r}
-evaluate(model)
+evaluate(pat_model)
 ```
 
 ```{r}
-evaluate(model_back_aic)
+evaluate(pat_model_back_aic)
 ```
 
 ```{r}
-evaluate(model_for_aic)
+evaluate(pat_model_for_aic)
 ```
 
 ```{r}
-evaluate(model_both_aic)
+evaluate(pat_model_both_aic)
 ```
 
 ```{r}
 ## Adj.R.Squared: 0.24 - CrossValidation: 16.9
-evaluate(model_back_bic)
+evaluate(pat_model_back_bic)
 ```
 
 ```{r}
-evaluate(model_for_bic)
+evaluate(pat_model_for_bic)
 ```
 
 ```{r}
-evaluate(model_both_bic)
+evaluate(pat_model_both_bic)
 ```
 
 ```{r}
 ## Remove large leverages
-new_data = removeInfluential(model, knee)
-model_without_large_leverages = lm(KneeScore_Patient ~ ., data = new_data)
-evaluate(model_without_large_leverages)
+new_data = removeInfluential(pat_model, knee)
+pat_model_without_large_leverages = lm(KneeScore_Patient ~ ., data = new_data)
+evaluate(pat_model_without_large_leverages)
 ```
 
 Removing the records with large hat values and refitting simply introduces more large hat values.  What is unique about these rows of data?
 
 ```{r}
-which(hatvalues(model) == 1.0)
+which(hatvalues(pat_model) == 1.0)
 print(knee[17,])
 print(knee[240,])
 print(knee[638,])
@@ -454,8 +459,8 @@ Each of these has a suspect factor entry.  Perhaps the entry only occurs infrequ
 Try pulling the suspect columns out of the LM and see what happens.
 
 ```{r}
-model_nine = lm(KneeScore_Patient ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)
-evaluate(model_nine)
+pat_model_nine = lm(KneeScore_Patient ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)
+evaluate(pat_model_nine)
 ```
 
 

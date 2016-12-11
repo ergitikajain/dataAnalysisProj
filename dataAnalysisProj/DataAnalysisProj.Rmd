@@ -74,7 +74,7 @@ evaluate = function(model){
   show(summary_output)
   plots(model)
 }
-
+# find and remove all influential values and return the resulting dataframe
 removeInfluential = function(model, data){
   large_lev_index = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
@@ -84,8 +84,13 @@ removeInfluential = function(model, data){
   newData = data[-index_ , ]
   return(newData)
 }
+<<<<<<< Updated upstream
 
 identifyInfluential = function(model, data){
+=======
+# identify all influential data points
+IdentifyInfluential = function(model, data){
+>>>>>>> Stashed changes
   large_lev_index = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
   rStandard = abs(rstandard(model))
@@ -93,13 +98,17 @@ identifyInfluential = function(model, data){
   index_ = intersect(intersect(large_lev_index, cooks), rStandardIndex)
   return(index_)
 }
+<<<<<<< Updated upstream
 
+=======
+# find large hat values, subtract them from the dataframe and return the dataframe
+>>>>>>> Stashed changes
 removeLargeHatValues = function(model, data){
   largeHat = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   newData = data[-largeHat, ]
   return(newData)
 }
-
+# calculate the prediction accuracy with a margin (i.e. if the margin is set to 2, then a predicted value of 35.5 will return true if the actual value is 33.5-37.5)
 prediction_accuracy = function(model, data, margin) {
   upper = data + margin
   lower = data - margin

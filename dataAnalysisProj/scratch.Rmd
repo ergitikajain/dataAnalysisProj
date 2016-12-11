@@ -337,10 +337,10 @@ bic_train = rmse(train_data$KneeScore_Patient, predict(model_back_bic, train_dat
 | Model        | Train RMSE         | Test RMSE       |
 |--------------|--------------------|-----------------|
 | `Model All+` | `r full_train`     | `r full_test`   |
-| `Model 8`    | `r train_mod_8`    | `r test_mod_8`  |
+| `Model 9`    | `r train_mod_8`    | `r test_mod_8`  |
 | `Model BIC`  | `r bic_train`      | `r bic_test`    |
 
-The additive model with all predictors has the best RMSE values.
+** how are these evalueated again?**
 
 Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Leverage`, `Large Cook's Distance` and `Large RStandard` values.
 
@@ -387,7 +387,6 @@ train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(model_10_bic, trai
 | `Model 10`    | `r train_mod_10`   | `r test_mod_10` |
 | `Model 10 BIC`| `r train_10_bic`   | `r test_10_bic` |
 
-Interestingly the models fit on the dataset without leverages fares worse on test RMSE.
 
 ## Appendix
 ### Knee Score Patient

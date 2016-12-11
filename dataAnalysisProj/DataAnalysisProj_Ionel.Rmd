@@ -26,62 +26,9 @@ Here we may consider *KneeScore\_Surgeon* or *KennScore\_Patient* as response an
 
 ## Load Data in R
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(lmtest)
-library(leaps)
-purple = '#772299'; green = '#3FE500'
-red = '#E50000'; lightblue = '#229999';
-blue = '#336699'
-```
-
-```{r, eval=TRUE}
-plots = function(model) {
-  par(mfcol=c(2,2))
-  qqnorm(resid(model), col = red, pch = 16)
-  qqline(resid(model), col = lightblue, lwd = 2)
-  
-  plot(fitted(model), resid(model), xlab = 'Fitted Values', ylab = 'Residuals', main = 'Fitted vs. Residuals Plot', col = purple, pch = 16)
-  abline(h = 0, col = green, lwd = 2)
-  
-  hist(resid(model), col = blue, main = 'Histogram of Residuals', xlab = 'Residuals')
-}
-
-evaluate = function(model){
-  
-  # Run each of the tests
-  shapiroTest = shapiro.test(resid(model))
-  bpTest = bptest(model)
-  rSquared = summary(model)$r.squared
-  adjRSquared = summary(model)$adj.r.squared
-  loocv = sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
-  large_lev = sum(hatvalues(model) > 2 * mean(hatvalues(model)))
-  # gives percentage of large residuals (should be less than 5%)
-  large_resid = sum(rstandard(model)[abs(rstandard(model)) > 2]) / length(resid(model)) 
-  
-  # Collect tests in dataframe
-  values = data.frame(Result = c(prettyNum(shapiroTest$p.value), prettyNum(bpTest$p.value), prettyNum(rSquared), prettyNum(adjRSquared),        prettyNum(loocv), prettyNum(large_lev), prettyNum(large_resid))) 
-  rowNames = data.frame(Test = c('Shapiro Wilk pvalue', 'Breusch-Pagan pvalue', 'R Squared', 'Adj R Squared', 'Cross Validation', 'Large Leverages', 'Large Residuals'))
-
-  summary_output = cbind(rowNames, values)
-  # Add dataframe to matrix
-  show(summary_output)
-  plots(model)
-}
-
-removeLargeHatValues = function(model, data){
-  values = hatvalues(model)
-  index_ = which(values > (2 * mean(values)))
-  newData = data[-c(index_),]
-  return(newData)
-}
-```
-
-
 ```{r}
 knee <- read.csv("knees.csv")
-knee$Surgeon = as.factor(knee$Surgeon)
-knee$Year = as.factor(knee$Year)
+
 # dimensions of the dataset
 dim(knee) 
 
@@ -98,7 +45,7 @@ levels(knee$Gender)
 head(knee[, 1: 5], n = 10)
 ```
 
-###Investigate for a model to analyze  Surgeon score response
+###Knee Score Surgeon
 
 ```{r}
 knee_model = lm(KneeScore_Surgeon ~ ., data = knee)
@@ -149,120 +96,67 @@ anova(knee_model_bic, knee_model_aic, knee_model)
 
 **Note:** Again, modeling all three models at once, p-value is very small for *knee_model_aic*, therefore, null is rejected. Whereas *knee_model* does not reject the null.
 
-**Comments:** Corelating all the above, so far, *knee_model_aic* seems to offer the best model to analyze Surgeon Score
-
-```{r}
-evaluate(knee_model_bic)
-```
-
-```{r}
-new_data = removeLargeHatValues(knee_model_bic, knee)
-knee_two = lm(KneeScore_Surgeon ~ ., data = new_data)
-evaluate(knee_two)
-```
-
-
-
-
-
-
-
-
-
-###Investigate for a model to analyze Patient score response
-
-```{r}
-knee_model = lm(KneeScore_Patient ~ ., data = knee)
-summary(knee_model)
-```
-**NOTE:** *knee_model* returns NA for some coefficients. That means that those variables are linearly related to others.
-
-```{r}
-knee_model_aic = step(knee_model, direction = "backward", trace = 0)
-summary(knee_model_aic)
-summary(knee_model_aic)$call
-```
-**NOTE:** *knee_model_aic* returns a model without NA coefficients. That's good as the algorithm was able to sense and eliminate those variables. 
-
-```{r}
-n = nrow(knee)
-knee_model_bic = step(knee_model, direction = "backward", trace = 0, k = log(n))
-summary(knee_model_bic)
-summary(knee_model_bic)$call
-```
-
-**NOTE:** *knee_model_bic* returns a model without NA coefficients, as well.  
-Also, it uses fewer variables when compared to *knee_model_aic*. 
-
-```{r}
-anova(knee_model_aic, knee_model)
-```
-
-**Note:** According to p-value, which is NOT big enough, the tendency is to reject the null.
-Rejection vs not rejection depends on the choice of level of significance, alpha.
-
-
-```{r}
-anova(knee_model_bic, knee_model)
-```
-
-**Note:** According to p-value, which is kind of small, the tendency is to reject the null. It all depends on the choise of level of confidence, alpha. 
-
-
-```{r}
-anova(knee_model_bic, knee_model_aic)
-```
-
-**Note:** p-value is small(not aggressively small , though) suggesting to reject the null. That means that *knee_model_aic* offers improvments for the modeling.
-
-```{r}
-anova(knee_model_bic, knee_model_aic, knee_model)
-```
-
-**Note:** Again, modeling all three models at once, p-value is  small for *knee_model_aic*, therefore, null is rejected. Whereas *knee_model* does not reject the null unless we choose level of confidence, alpha = 0.05.
-
 **Comments:** Corelating all the above, so far, *knee_model_aic* seems to offer the best model.
 
-
 ```{r}
-evaluate(knee_model_bic)
-```
-
-```{r}
-new_data = removeLargeHatValues(knee_model_bic, knee)
-knee_two = lm(KneeScore_Patient ~ ., data = new_data)
-evaluate(knee_two)
+library(leaps)
+all_knee_mod = summary(regsubsets(KneeScore_Surgeon ~ ., data = knee, really.big=T))
 ```
 
 
 
-### Correlation between KneeScore_Patient and KneeScore_Surgeon
 
-```{r}
-round(cor(knee$KneeScore_Surgeon, knee$KneeScore_Patient), 2)
-```
 
-**Note:** We have a very week correlation between Patient score and Surgeon score. 
-Why? Shouldn't they be the same or very similar?
 
-```{r, fig.width=20, fig.height=10}
-par(mfrow=c(1,3))
-plot(knee$KneeScore_Patient, knee$KneeScore_Surgeon)
-plot(knee$KneeScore_Surgeon)
-#par(new=T)
-plot(knee$KneeScore_Patient)
-#plot(knee$KneeScore_Patient, col = "red", add=TRUE)
-```
 
-```{r, fig.width=20, fig.height=10}
-par(mfrow=c(1,2))
-hist(knee$KneeScore_Surgeon)
-hist(knee$KneeScore_Patient)
-```
 
-##### Model selection
-```{r}
-lm(formula = KneeScore_Patient ~ Year + Age + Gender + Weight + 
-    Height + Race + KneeScore_Surgeon + TibialInsertWidth + PatellaDiameter, 
-    data = knee)
-```
+
+
+
+
+
+
+
+<!-- ```{r warning=FALSE, message=FALSE} -->
+<!-- plot(fitted(knee_model_aic), resid(knee_model_aic), col = "magenta", pch = 20, cex = 1.5, xlab = "Fitted", ylab = "Residuals") -->
+<!-- abline(h=0, lwd = 2, col = "olivedrab1") -->
+
+<!-- qqnorm(resid(knee_model_aic), main = "Normal QQ Plot - Knee Model AIC", col = "purple4", pch = 20, cex = 1.5) -->
+<!-- qqline(resid(knee_model_aic), col = "Orange", lwd = 3) -->
+
+<!-- library(lmtest) -->
+<!-- bptest(knee_model_aic) -->
+
+<!-- shapiro.test(resid(knee_model_aic)) -->
+
+<!-- ``` -->
+
+<!-- ###Knee Score Patient -->
+<!-- ```{r} -->
+<!-- patient_model = lm(KneeScore_Patient ~ ., data = knee) -->
+<!-- summary(patient_model) -->
+
+<!-- patient_model_aic = step(patient_model, direction = "backward", trace = 0) -->
+<!-- summary(patient_model_aic)$call -->
+
+<!-- patient_model_bic = step(patient_model, direction = "backward", trace = 0) -->
+<!-- summary(patient_model_bic)$call -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- anova(patient_model_aic, patient_model) -->
+<!-- ``` -->
+
+<!-- ```{r warning=FALSE, message=FALSE} -->
+<!-- plot(fitted(patient_model_aic), resid(patient_model_aic), col = "green", pch = 20, cex = 1.5, xlab = "Fitted", ylab = "Residuals") -->
+<!-- abline(h=0, lwd = 2, col = "black") -->
+
+<!-- qqnorm(resid(patient_model_aic), main = "Normal QQ Plot - Patient Model AIC", col = "red", pch = 20, cex = 1.5) -->
+<!-- qqline(resid(patient_model_aic), col = "navy", lwd = 3) -->
+
+<!-- library(lmtest) -->
+<!-- bptest(patient_model_aic) -->
+
+<!-- shapiro.test(resid(patient_model_aic)) -->
+
+<!-- ``` -->

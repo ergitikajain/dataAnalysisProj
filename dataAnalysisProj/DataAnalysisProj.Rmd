@@ -84,13 +84,9 @@ removeInfluential = function(model, data){
   newData = data[-index_ , ]
   return(newData)
 }
-<<<<<<< Updated upstream
 
-identifyInfluential = function(model, data){
-=======
 # identify all influential data points
 IdentifyInfluential = function(model, data){
->>>>>>> Stashed changes
   large_lev_index = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
   rStandard = abs(rstandard(model))
@@ -98,11 +94,8 @@ IdentifyInfluential = function(model, data){
   index_ = intersect(intersect(large_lev_index, cooks), rStandardIndex)
   return(index_)
 }
-<<<<<<< Updated upstream
 
-=======
 # find large hat values, subtract them from the dataframe and return the dataframe
->>>>>>> Stashed changes
 removeLargeHatValues = function(model, data){
   largeHat = which(hatvalues(model) > 2 * mean(hatvalues(model)))
   newData = data[-largeHat, ]
@@ -129,7 +122,21 @@ surgeon_full_additive_model = lm(KneeScore_Surgeon ~ ., data = knee)
 evaluate(surgeon_full_additive_model)
 ```
 
-The baseline model has many large leverage values, which, upon inspection may be coming from several of the implant fields.  Perhaps removing the suspect implant predictors will help improve the model.
+The baseline model has many large hat values.  Let's try to understand why.
+
+```{r}
+largeHat = which(hatvalues(surgeon_full_additive_model) > (2 * mean(hatvalues(surgeon_full_additive_model))))
+unique(largeHat)
+```
+
+```{r}
+print(knee[689, ])
+print(knee[1927, ])
+```
+
+After inspection of the rows that represent the large hat values it seems that there are a preponderence of values that are either errant entries or valid, but rare entries.  For example, the `Race` predictor has only two entries for `Mid-East Arabian` and the `FemoralComponentSize` entry of '8+' is errant.  First we will attempt to remove the predictors that seem to be prone to errant or rare values and later we will remove the high leverage values directly.
+
+We attempted several model iterations with tranformations of both the response and predictors as well as large all two-way interaction models none of which proved helpful in predicting the response.  The models with many interactions took both substatantial time and computing resources to fit and were suspect of overfitting.  We pick up here with model eight which was the first of the promising models.  The interested reader can find earlier attempted model in the appendix.
 
 ```{r}
 surgeon_model_eight = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
@@ -175,10 +182,10 @@ bic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_back_bic, t
 | Model        | Train RMSE         | Test RMSE       |
 |--------------|--------------------|-----------------|
 | `Model All+` | `r full_train`     | `r full_test`   |
-| `Model 9`    | `r train_mod_8`    | `r test_mod_8`  |
+| `Model 8`    | `r train_mod_8`    | `r test_mod_8`  |
 | `Model BIC`  | `r bic_train`      | `r bic_test`    |
 
-** how are these evalueated again?**
+The full model delivers the best RMSE as well as 
 
 Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Leverage`, `Large Cook's Distance` and `Large RStandard` values.
 
@@ -225,75 +232,7 @@ train_10_bic = rmse(train_data_two$KneeScore_Surgeon, predict(surgeon_model_10_b
 | `Model 10`    | `r train_mod_10`   | `r test_mod_10` |
 | `Model 10 BIC`| `r train_10_bic`   | `r test_10_bic` |
 
-
-## Appendix
-### Knee Score Surgeon
-```{r}
-surgeon_model = lm(KneeScore_Surgeon ~. , data = knee)
-surgeon_model_back_aic = step(surgeon_model, direction = "backward", trace = 0)
-surgeon_model_for_aic = step(surgeon_model, direction = "forward", trace = 0)
-surgeon_model_both_aic = step(surgeon_model, direction = "both", trace = 0)
-
-n = length(resid(surgeon_model))
-surgeon_model_back_bic = step(surgeon_model, direction = "backward", k = log(n), trace = 0)
-surgeon_model_for_bic = step(surgeon_model, direction = "forward", k = log(n), trace = 0)
-surgeon_model_both_bic = step(surgeon_model, direction = "both", k = log(n), trace = 0)
-```
-
-```{r}
-evaluate(surgeon_model)
-```
-
-```{r}
-evaluate(surgeon_model_back_aic)
-```
-
-```{r}
-evaluate(surgeon_model_for_aic)
-```
-
-```{r}
-evaluate(surgeon_model_both_aic)
-```
-
-```{r}
-## Adj.R.Squared: 0.24 - CrossValidation: 16.9
-evaluate(surgeon_model_back_bic)
-```
-
-```{r}
-evaluate(surgeon_model_for_bic)
-```
-
-```{r}
-evaluate(surgeon_model_both_bic)
-```
-
-```{r}
-## Remove large leverages
-new_data = removeInfluential(surgeon_model, knee)
-surgeon_model_without_large_leverages = lm(KneeScore_Surgeon ~ ., data = new_data)
-evaluate(surgeon_model_without_large_leverages)
-```
-
-Removing the records with large hat values and refitting simply introduces more large hat values.  What is unique about these rows of data?
-
-```{r}
-which(hatvalues(surgeon_model) == 1.0)
-print(knee[17,])
-print(knee[240,])
-print(knee[638,])
-print(knee[1093,])
-print(knee[1775, ])
-```
-
-Each of these has a suspect factor entry.  Perhaps the entry only occurs infrequently in the database and is causing the entire row to be flagged as high leverage?
-Try pulling the suspect columns out of the LM and see what happens.
-
-```{r}
-surgeon_model_nine = lm(KneeScore_Surgeon ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)
-evaluate(surgeon_model_nine)
-```
+Removing the large hat values has had the opposite intended effect of decreasing the RMSE values.
 
 ### Knee Score Patient
 
@@ -401,10 +340,44 @@ train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(pat_model_10_bic, 
 | `Model 10`    | `r train_mod_10`   | `r test_mod_10` |
 | `Model 10 BIC`| `r train_10_bic`   | `r test_10_bic` |
 
-Interestingly the models fit on the dataset without leverages fares worse on test RMSE.
+Interestingly, again the models fit on the dataset without leverages fares worse on test RMSE.
+
+## Conclusion
+
+
 
 ## Appendix
-### Knee Score Patient
+
+```{r, eval = FALSE}
+# Warning: takes hours to fit
+all_two_way_model = lm(KneeScore_Surgeon ~ .*., data = knee)
+```
+
+```{r}
+# Warning...
+n = length(resid(all_two_way_model))
+model_one_bic_all_two_way = step(all_two_way_model, direction = 'backward', k = log(n), trace = 0)
+```
+
+```{r}
+model_one_pat = lm(log(KneeScore_Patient) ~ ., data = knee)
+model_one_surg = lm(log(KneeScore_Surgoen) ~ ., data = knee)
+```
+
+```{r}
+model_two_exp_pat= lm(KneeScore_Patient^2 ~ ., data = knee)
+model_two_exp_surg = lm(KneeScore_Surgeon^2 ~ ., data = knee)
+```
+
+```{r}
+# replace all 0 values with the mean of the vector
+temp = knees
+temp$KneeScore_Patient[temp$KneeScore_Patient == 0] = mean(temp$KneeScore_Patient)
+
+model_five = lm(KneeScore_Patient ~ ., data = temp)
+evaluate(model_five)
+```
+
 ```{r}
 pat_model = lm(KneeScore_Patient ~. , data = knee)
 pat_model_back_aic = step(pat_model, direction = "backward", trace = 0)
@@ -464,8 +437,6 @@ print(knee[1093,])
 print(knee[1775, ])
 ```
 
-Each of these has a suspect factor entry.  Perhaps the entry only occurs infrequently in the database and is causing the entire row to be flagged as high leverage?
-Try pulling the suspect columns out of the LM and see what happens.
 
 ```{r}
 pat_model_nine = lm(KneeScore_Patient ~ . - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - FemoralComponentType, data = knee)

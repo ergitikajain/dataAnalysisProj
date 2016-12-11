@@ -94,7 +94,11 @@ summary(model_pat_both_bic)$adj.r.squared
 
 
 
+#<<<<<<< HEAD
 library("leaps")
+#=======
+library(leaps)
+#>>>>>>> f21c7d77c2297218d0a938c235be3bd1ea3e9268
 all_mod = summary(regsubsets(KneeScore_Surgeon ~ ., data = knee,really.big=T))
 all_mod$adjr2
 (best_r2_ind = which.max(all_mod$adjr2))

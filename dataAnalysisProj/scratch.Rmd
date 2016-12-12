@@ -281,3 +281,20 @@ model_nine = lm(KneeScore_Surgeon ~ . - TibialInsertType - FemoralComponentModel
 evaluate(model_nine)
 ```
 
+```{r}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + FemoralComponentModel + FemoralComponentSize + FemoralComponentType + TibialTrayModel + TibialTraySize + TibialInsertModel + TibialInsertWidth + TibialInsertType + PatellaModel + PatellaDiameter, span=0.7, data=knee)
+```
+
+```{r}
+scatterplotMatrix(~ Surgeon + Year + Age + Gender + Weight + Height + BMI + Diagnosis + Race + Side + KneeScore_Surgeon + KneeScore_Patient + GPS + Manufacturer, span=0.7, data=knee)
+```
+
+```{r}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + Surgeon + Year + Age + Gender + Weight + Height, span=0.7, data=knee)
+
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + BMI + Diagnosis + Race + Side + GPS + Manufacturer, span=0.7, data=knee)
+
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + FemoralComponentModel + FemoralComponentSize + FemoralComponentType + TibialTrayModel + TibialInsertType, span=0.7, data=knee)
+ 
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + TibialTraySize + TibialInsertModel + TibialInsertWidth + PatellaModel + PatellaDiameter, span=0.7, data=knee)
+```

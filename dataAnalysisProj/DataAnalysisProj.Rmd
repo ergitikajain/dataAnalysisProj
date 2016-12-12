@@ -81,7 +81,7 @@ removeInfluential = function(model, data){
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
   rStandard = abs(rstandard(model))
   rStandardIndex = which(rStandard > 2)
-  index_ = intersect(intersect(large_lev_index, cooks), rStandardIndex)
+  index_ = union(union(large_lev_index, cooks), rStandardIndex)
   newData = data[-index_ , ]
   return(newData)
 }
@@ -92,7 +92,7 @@ IdentifyInfluential = function(model, data){
   cooks = which(cooks.distance(model) > 4 / length(cooks.distance(model)))
   rStandard = abs(rstandard(model))
   rStandardIndex = which(rStandard > 2)
-  index_ = intersect(intersect(large_lev_index, cooks), rStandardIndex)
+  index_ = union(union(large_lev_index, cooks), rStandardIndex)
   return(index_)
 }
 

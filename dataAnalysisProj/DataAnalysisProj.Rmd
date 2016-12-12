@@ -1,3 +1,4 @@
+<link href="custom.css" rel="stylesheet">
 ---
 title:  'Data Analysis Project: Knee Replacement Surgery Outcomes'
 subtitle: 'Analysis Project'

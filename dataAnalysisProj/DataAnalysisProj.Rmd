@@ -144,8 +144,8 @@ For a better view of the above statement, we plotted the following plot, showing
 scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient, span=0.7, data=knee)
 ```
 
-The distribution of `KneeScore_Surgeon` which reflects the score of a procedure assigned be the `Surgeon` is unimodal distribution compared to a multimodel distribution of `KneeScore_Patient`, which is the score assigned by `Patient`.
-Our explanation of this is that `Surgeon` assgigns any number between 1 and 100 without any discreation whereas `Patient` has a tendency to round up the score to the nearest fifth(Ex: 5, 10, 35, 50, etc)
+The distribution of `KneeScore_Surgeon` which reflects the score of a procedure assigned be the `Surgeon` is unimodal distribution versus a multimodel distribution of `KneeScore_Patient`, which is the score assigned by `Patient`.
+Our explanation of this is that `Surgeon` assgigns any number between 1 and 100 without any discreation whereas `Patient` has a tendency to round up the score to the nearest fifth(Ex: 5, 10, 35, 50, etc) which creates the multi-picks of the distribution. 
 
 Begin by fitting a full additive model as a baseline and evaluating.
 

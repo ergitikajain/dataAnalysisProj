@@ -31,6 +31,7 @@ Here we may consider *KneeScore\_Surgeon* or *KneeScore\_Patient* as response an
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(lmtest)
+library(car)
 purple = '#772299'; green = '#3FE500'; red = '#E50000'; lightblue = '#229999'; blue = '#336699'
 ```
 
@@ -114,6 +115,25 @@ rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
 ```
 
 ### Knee Score Surgeon
+
+Before moving onto the formal analysis of our data set, we started by performing visual inspection by plotting dependencies among our the variables.
+The main focus was to look for any visual relationship between `KneeScore_Surgeon, KneeScore_Patient` and the rest of variables. 
+Our choise was to use `scatterplotMatrix` from `car` package as it is plots regression lines along with the actual data.
+
+```{r, fig.height=7, fig.width=12}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + Surgeon + Year + Age + Gender + Weight + Height, span=0.7, data=knee)
+```
+```{r, fig.height=7, fig.width=12}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + BMI + Diagnosis + Race + Side + GPS + Manufacturer, span=0.7, data=knee)
+```
+
+```{r, fig.height=7, fig.width=12}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + FemoralComponentModel + FemoralComponentSize + FemoralComponentType + TibialTrayModel + TibialInsertType, span=0.7, data=knee)
+ ```
+ 
+ ```{r, fig.height=7, fig.width=12}
+scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + TibialTraySize + TibialInsertModel + TibialInsertWidth + PatellaModel + PatellaDiameter, span=0.7, data=knee)
+```
 
 Begin by fitting a full additive model as a baseline and evaluating.
 

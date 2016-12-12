@@ -24,6 +24,14 @@ We hope to create a model that can predict each of the scores based on a variety
 ## Background information
 This data has been collected from a Southern California Hospital in collaboration with the Shiley Center for Orthopedic Research.  The data is used for both clinical research and postoperative monitoring of implant survivorship.  All patient specific information has been removed from the data so it adheres to the Health Insurance Portability and Accountability Act (HIPAA).
 
+## Overview of the work flow
+We formed our group by advirtising  on the course forum site and Slack chat.
+After the group has been formed, the first step was to decide on a topic and a data set for the selected topic.
+Next, after our proposel has been approved, we clean up the data and started working towards finding a final that is most suitable for our data set.
+To reach the final model, each of us, work indepentelly to come of up with a list of models.
+Models were presented and debated during our regular meeting via Zoom were ideas were exchanged.
+Eventaully, we converged and decided on a final model that has been used for the work presented here.
+
 ## Statement
 We hope to determine the impact a particular surgeon or the type of implants used has on the patient's outcome after surgery.  We are also interested in exploring the potential relationship between anthropomorphic factors and the patient's postoperative satisfaction.  Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores. Nevertheless, we keep our option opened to investigate other aspects that were not 'visible' or never thought about it but might reveal themselves as we move on with the project.
 
@@ -482,6 +490,6 @@ pat_model_nine = lm(KneeScore_Patient ~ . - TibialInsertType - FemoralComponentM
 evaluate(pat_model_nine)
 ```
 
-
+## References
 
 

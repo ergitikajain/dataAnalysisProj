@@ -24,7 +24,7 @@ We hope to create a model that can predict each of the scores based on a variety
 ## Background information
 This data has been collected from a Southern California Hospital in collaboration with the Shiley Center for Orthopedic Research.  The data is used for both clinical research and postoperative monitoring of implant survivorship.  All patient specific information has been removed from the data so it adheres to the Health Insurance Portability and Accountability Act (HIPAA).
 
-## Overview of the work flow
+## Overview of the Work Flow
 We formed our group by advertising on the course forum site and Slack chat.
 After the group had been formed, the first step was to decide on a topic and a data set for the selected topic.
 Next, after our proposal had been approved, we cleaned up the data and started working towards finding a final model that is most suitable for our data set.
@@ -50,7 +50,7 @@ knee$Surgeon = as.factor(knee$Surgeon)
 knee$Year = as.factor(knee$Year)
 ```
 
-### Functions for model evaluation
+### Functions for Model Evaluation
 
 ```{r}
 #Function to plot various plots as QQPlot, Fitted vs Residual Plot.
@@ -124,6 +124,24 @@ rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
 ```
 
 ### Knee Score Surgeon
+
+#### Interaction Models
+```{r}
+knee_int = lm(KneeScore_Surgeon ~ Surgeon + KneeScore_Patient:Age:Diagnosis * Side:TibialInsertModel, data = knee)
+evaluate(knee_int)
+
+knee_int2 = lm(KneeScore_Surgeon ~ Surgeon + Age:Race + Side * KneeScore_Patient * TibialInsertModel, data = knee)
+evaluate(knee_int2)
+
+int_data = removeInfluential(knee_int, knee)
+knee_int_no_influence = lm(KneeScore_Surgeon ~ Surgeon + KneeScore_Patient:Age:Diagnosis * Side:TibialInsertModel, data = int_data)
+evaluate(knee_int_no_influence)
+
+int_data2 = removeInfluential(knee_int2, knee)
+knee_int2_no_influence = lm(KneeScore_Surgeon ~ Surgeon + Age:Race + Side * KneeScore_Patient * TibialInsertModel, data = int_data2)
+evaluate(knee_int2_no_influence)
+```
+
 
 Before moving onto the formal analysis of our data set, we started by performing visual inspection by plotting dependencies among our the variables.
 The main focus was to look for any visual relationship between `KneeScore_Surgeon, KneeScore_Patient` and the rest of the variables. 

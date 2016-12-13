@@ -232,17 +232,17 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2010,65,Female,165,63,29.25,Osteoarthritis,White,Right,77,70,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,3,Legion,9,high flex,Genesis II,29
 5,2010,57,Female,200,63,35.46,Osteoarthritis,White,Left,40,15,Yes,Smith & Nephew,Legion,5,posterior stabilized,Genesis II,4,Genesis II,18,high flex,Genesis II,29
 3,2010,61,Female,175,56,39.27,Osteoarthritis,Other,Left,44,30,No,Zimmer,Nexgen,E,posterior stabilized,Nexgen,5,Nexgen,10,high flex,NexGen,35
-3,2010,78,Male,216,72,29.32,Osteoarthritis,White,Right,96,90,No,Zimmer,Nexgen,F,posterior stabilized,Nexgen,7,Prolong,10,high flex,NexGen,38
+3,2010,78,Male,216,72,29.32,Osteoarthritis,White,Right,96,90,No,Zimmer,Nexgen,F,posterior stabilized,Nexgen,7,Nexgen,10,high flex,NexGen,38
 3,2010,74,Female,191,69,28.23,Osteoarthritis,White,Left,87,50,No,Zimmer,Nexgen,F,posterior stabilized,Nexgen,5,Nexgen,10,posterior stabilized,NexGen,35
 3,2010,73,Female,195,70,28,Osteoarthritis,White,Right,60,50,No,Zimmer,Nexgen,F,cruciate retaining,Nexgen,5,Nexgen,10,standard,NexGen,32
 3,2010,53,Female,132,64,22.68,Osteoarthritis,White,Right,48,70,No,Zimmer,Nexgen,D,cruciate retaining,Nexgen,3,Nexgen,10,standard,NexGen,29
 3,2010,68,Female,150,67,23.51,Avascular necrosis,White,Left,57,50,No,Zimmer,Nexgen,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,32
 3,2010,74,Female,142,63,25.18,Osteoarthritis,White,Right,67,60,No,Zimmer,Nexgen,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,35
-3,2010,66,Female,130,68,19.78,Osteoarthritis,White,Bilateral,60,80,No,Zimmer,Zimmer Precoat,E -,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,32
+3,2010,66,Female,130,68,19.78,Osteoarthritis,White,Bilateral,60,80,No,Zimmer,Zimmer Precoat,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,32
 3,2010,91,Female,145,65,24.15,Osteoarthritis,White,Bilateral,98,15,No,Zimmer,Nexgen,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,35
 3,2010,91,Female,145,65,24.15,Osteoarthritis,White,Bilateral,89,15,No,Zimmer,Nexgen,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,35
 3,2010,79,Female,140,64,24.05,Osteoarthritis,White,Left,62,50,No,Zimmer,Nexgen,D,cruciate retaining,Nexgen,3,Nexgen,10,standard,NexGen,29
-3,2010,61,Female,130,67,20.38,Osteoarthritis,White,Left,31,60,No,Zimmer,Nexgen,E-,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,35
+3,2010,61,Female,130,67,20.38,Osteoarthritis,White,Left,31,60,No,Zimmer,Nexgen,E,cruciate retaining,Nexgen,4,Nexgen,10,standard,NexGen,35
 3,2011,75,Female,136,61,25.72,Osteoarthritis,White,Right,54,50,Yes,DePuy (J&J),Sigma,2.5,cruciate retaining,PFC Sigma,2,PFC Sigma,8,"curved,Fixed bearing",Patella Round Dome,35
 1,2011,58,Female,190,60,37.14,Osteoarthritis,Hispanic,Bilateral,42,35,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,2,Genesis II,15,standard,Genesis II,29
 1,2011,58,Female,190,60,37.14,Osteoarthritis,Hispanic,Bilateral,42,35,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,2,Genesis II,9,standard,Genesis II,29
@@ -370,7 +370,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2011,74,Male,165,67,25.87,Osteoarthritis,Indian Sub-Continent,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
 2,2011,60,Male,210,70,30.16,Osteoarthritis,Hispanic,Bilateral,45,35,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon X3,13,standard,Triathlon Asymmetric Patella,32
 1,2011,74,Male,165,67,25.87,Osteoarthritis,Indian Sub-Continent,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
-5,2011,66,Male,205,73,27.07,Psoriatic Arthritis,White,Left,39,45,No,Stryker,Triathlon,5,posterior stabilized,Triathlon,5,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,40
+5,2011,66,Male,205,73,27.07,Osteoarthritis,White,Left,39,45,No,Stryker,Triathlon,5,posterior stabilized,Triathlon,5,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,40
 2,2011,63,Male,290,68,44.13,Osteoarthritis,White,Left,40,50,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,5,Triathlon X3,11,standard,Triathlon Asymmetric Patella,35
 4,2011,60,Male,217,71,30.29,Osteoarthritis,White,Left,47,50,No,Stryker,Triathlon,6,posterior stabilized,Triathlon,5,Triathlon X3,9,standard,Triathlon Asymmetric Patella,35
 4,2011,53,Male,195,72,26.47,Osteoarthritis,White,Left,51,80,No,Stryker,Triathlon,6,cruciate retaining,Triathlon,5,Triathlon X3,9,standard,Triathlon Asymmetric Patella,35
@@ -398,7 +398,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 3,2011,66,Male,262,70,37.63,Osteoarthritis,White,Bilateral,47,35,Yes,DePuy (J&J),PFC Sigma,5,cruciate retaining,PFC Sigma,5,PFC Sigma,8,curved,Patella Round Dome,38
 4,2011,80,Female,212,67,33.23,Osteoarthritis,White,Left,29,15,Yes,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon,9,standard,Triathlon Asymmetric Patella,35
 3,2011,53,Female,199,69,29.41,Post-trauma,White,Left,30,30,Yes,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,5,Legion,11,high flex,Genesis II,35
-3,2011,76,Male,203,77,24.09,Osteoarthritis,White,Left,40,50,Yes,DePuy (J&J),Sigma,5,cruciate retaining,"PFC Sigma,Modular",5,"PFC Sigma,Modular",8,"Fixed bearing,curved",Oval Dome Patella 3-peg,41
+3,2011,76,Male,203,77,24.09,Osteoarthritis,White,Left,40,50,Yes,DePuy (J&J),Sigma,5,cruciate retaining,PFC Sigma,5,PFC Sigma,8,"Fixed bearing,curved",Oval Dome Patella 3-peg,41
 4,2011,72,Female,245,71,34.2,Osteoarthritis,White,Left,41,45,Yes,Stryker,Triathlon,6,cruciate retaining,Triathlon,5,Triathlon,9,standard,Triathlon Asymmetric Patella,38
 5,2011,93,Male,195,74,25.06,Osteoarthritis,White,Left,44,0,Yes,Stryker,Triathlon,6,cruciate retaining,Triathlon,5,Triathlon X3,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,38
 4,2011,65,Male,195,74,25.06,Osteoarthritis,White,Left,44,65,Yes,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon X3,9,standard,Triathlon Asymmetric Patella,38
@@ -529,9 +529,9 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2011,55,Male,180,67,28.22,Osteoarthritis,White,Right,49,45,Yes,Smith & Nephew,Legion,7,posterior stabilized,Genesis II,6,Genesis II,15,posterior stabilized,Genesis II,35
 3,2011,82,Female,105,63,18.62,Inflammatory non-infection,White,Bilateral,25,50,No,Zimmer,Nexgen Legacy,E,posterior stabilized,Nexgen Legacy,4,Nexgen Legacy,10,standard,NexGen Legacy,32
 3,2011,71,Male,185,65,30.81,Osteoarthritis,Other,Bilateral,39,70,Yes,Zimmer,Nexgen Legacy,F,posterior stabilized,Nexgen,5,Nexgen Legacy,10,posterior stabilized,NexGen,35
-3,2011,70,Male,176,69,26.01,Osteoarthritis,Hispanic,Bilateral,21,30,Yes,Zimmer,Nexgen,G,posterior stabilized,Nexgen,6,Prolong,12,high flex,NexGen,35
+3,2011,70,Male,176,69,26.01,Osteoarthritis,Hispanic,Bilateral,21,30,Yes,Zimmer,Nexgen,G,posterior stabilized,Nexgen,6,Nexgen,12,high flex,NexGen,35
 3,2011,70,Male,176,69,26.01,Osteoarthritis,Hispanic,Bilateral,36,30,Yes,Zimmer,Nexgen,G,posterior stabilized,Nexgen,6,Nexgen,12,high flex,NexGen,38
-3,2011,71,Male,235,70,33.75,Osteoarthritis,White,Right,41,50,Yes,Zimmer,Nexgen Legacy,H,cruciate retaining,Nexgen,7,Prolong,10,high flex,NexGen,35
+3,2011,71,Male,235,70,33.75,Osteoarthritis,White,Right,41,50,Yes,Zimmer,Nexgen Legacy,H,cruciate retaining,Nexgen,7,Nexgen,10,high flex,NexGen,35
 5,2012,75,Female,160,60,31.28,Osteoarthritis,Hispanic,Left,38,0,Yes,Stryker,Triathlon,1,cruciate retaining,Triathlon,1,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
 5,2012,69,Female,140,62,25.63,Post-trauma,White,Left,53,0,Yes,Stryker,Triathlon,1,cruciate retaining,Triathlon,1,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,29
 2,2012,57,Female,216,64,37.11,Osteoarthritis,White,Left,31,45,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,2,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
@@ -571,7 +571,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 4,2012,59,Female,183,66,29.56,Osteoarthritis,White,Bilateral,34,45,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,9,standard,Triathlon Asymmetric Patella,32
 4,2012,54,Female,161,66,26.01,Osteoarthritis,White,Left,33,45,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,9,high flex,Triathlon Asymmetric Patella,32
 2,2012,61,Female,165,67,25.87,Osteoarthritis,White,Left,34,50,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,3,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
-1,2012,85,Female,110,59,22.24,Osteoarthritis,White,Left,36,35,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,3/4/2016 0:00,Genesis II,11,high flex,Genesis II,32
+1,2012,85,Female,110,59,22.24,Osteoarthritis,White,Left,36,35,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,3,Genesis II,11,high flex,Genesis II,32
 2,2012,75,Female,175,62,32.04,Osteoarthritis,White,Left,41,30,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,9,TS (Total Stabilizer),Triathlon Asymmetric Patella,35
 4,2012,88,Female,160,66,25.85,Osteoarthritis,White,Left,42,45,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,11,high flex,Triathlon Asymmetric Patella,32
 3,2012,68,Female,172,69,25.42,Osteoarthritis,White,Left,44,50,No,DePuy (J&J),Sigma,4N,cruciate retaining,PFC Sigma,3,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,38
@@ -679,7 +679,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 5,2012,79,Male,189,68,28.76,Osteoarthritis,White,Right,75,30,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,4,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,38
 2,2012,83,Female,150,63,26.59,Osteoarthritis,White,Right,69,50,No,Smith & Nephew,Triathlon,4,cruciate retaining,Triathlon,4,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
 4,2012,68,Female,165,64,28.35,Osteoarthritis,White,Right,68,30,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,4,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
-1,2012,72,Female,180,67,28.22,Osteoarthritis,White,Right,67,50,No,Smith & Nephew,Legion,5,cruciate retaining,Genesis II,3/4/2016 0:00,Genesis II,9,high flex,Genesis II,35
+1,2012,72,Female,180,67,28.22,Osteoarthritis,White,Right,67,50,No,Smith & Nephew,Legion,5,cruciate retaining,Genesis II,3,Genesis II,9,high flex,Genesis II,35
 2,2012,58,Female,156,67,24.45,Osteoarthritis,White,Right,65,80,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,4,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,29
 4,2012,88,Female,140,65,23.32,Osteoarthritis,White,Right,62,80,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,4,Triathlon,9,high flex,Triathlon Asymmetric Patella,32
 4,2012,74,Female,237,67,37.15,Osteoarthritis,White,Right,55,50,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,4,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
@@ -698,7 +698,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 2,2012,76,Female,230,68,35,Osteoarthritis,White,Right,36,50,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,4,Triathlon,13,TS (Total Stabilizer),Triathlon Asymmetric Patella,32
 3,2012,74,Male,197,68,29.98,Osteoarthritis,White,Right,32,35,No,DePuy (J&J),Sigma,5,cruciate retaining,PFC Sigma,4,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,38
 4,2012,56,Female,240,69,35.47,Osteoarthritis,White,Right,23,50,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,4,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
-3,2012,77,Female,176,65,29.31,Osteoarthritis,White,Right,35,30,No,Zimmer,Nexgen Legacy,E,cruciate retaining,Nexgen Legacy,3/4/2016 0:00,Nexgen Legacy,10,high flex,NexGen Legacy,32
+3,2012,77,Female,176,65,29.31,Osteoarthritis,White,Right,35,30,No,Zimmer,Nexgen Legacy,E,cruciate retaining,Nexgen Legacy,3,Nexgen Legacy,10,high flex,NexGen Legacy,32
 4,2012,71,Female,199,65,33.14,Osteoarthritis,White,Right,46,50,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,4,Triathlon,11,high flex,Triathlon Asymmetric Patella,32
 2,2012,66,Female,130,68,19.78,Osteoarthritis,White,Right,37,50,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,4,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
 3,2012,66,Female,237,68,36.07,Osteoarthritis,White,Right,60,50,No,DePuy (J&J),PFC Sigma,5,posterior stabilized,PFC Sigma,4,PFC Sigma,10,"lipped,Fixed bearing",Oval Dome Patella 3-peg,38
@@ -761,7 +761,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 2,2012,72,Male,163,68,24.81,Osteoarthritis,White,Left,57,70,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,38
 2,2012,78,Male,189,69,27.94,Osteoarthritis,White,Left,61,80,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
 4,2012,58,Male,225,70,32.31,Osteoarthritis,White,Left,61,60,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
-1,2012,72,Male,210,70,30.16,Osteoarthritis,White,Left,70,60,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,5/6/2016 0:00,Genesis II,9,high flex,Genesis II,38
+1,2012,72,Male,210,70,30.16,Osteoarthritis,White,Left,70,60,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,38
 3,2012,75,Male,205,73,27.07,Osteoarthritis,White,Right,80,70,No,DePuy (J&J),Sigma,5,posterior stabilized,MBT Keel,5,Rotating Platform,10,posterior stabilized,Oval Dome Patella 3-peg,41
 2,2012,87,Male,160,66,25.85,Osteoarthritis,White,Right,77,45,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,5,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
 4,2012,81,Female,185,63,32.8,Osteoarthritis,White,Right,77,70,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,5,Triathlon,9,standard,Triathlon Asymmetric Patella,32
@@ -879,7 +879,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 5,2012,71,Female,255,76,31.07,Osteoarthritis,White,Right,51,70,Yes,Stryker,Triathlon,6,cruciate retaining,Triathlon,7,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,40
 3,2012,71,Male,235,70,33.75,Osteoarthritis,White,Bilateral,50,35,No,DePuy (J&J),Sigma,5,cruciate retaining,PFC Sigma,5,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,38
 1,2012,87,Male,228,76,27.78,Osteoarthritis,White,Left,56,60,No,Smith & Nephew,Legion,8,cruciate retaining,Genesis II,8,Genesis II,9,high flex,Genesis II,41
-4,2012,55,Male,355,72,48.19,Osteoarthritis,White,Right,25,30,No,Stryker,Triathlon,7,cruciate retaining,Triathlon,8,Scorpio,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
+4,2012,55,Male,355,72,48.19,Osteoarthritis,White,Right,25,30,No,Stryker,Triathlon,7,cruciate retaining,Triathlon,8,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,35
 3,2012,71,Male,235,70,33.75,Osteoarthritis,White,Bilateral,48,35,Yes,DePuy (J&J),Sigma,5,cruciate retaining,PFC Sigma,5,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,38
 4,2012,68,Male,260,74,33.41,Osteoarthritis,White,Right,40,80,No,Stryker,Triathlon,7,cruciate retaining,Triathlon,6,Triathlon X3 Total Stabilizer,11,high flex,Triathlon,38
 1,2012,58,Female,219,65,36.48,Osteoarthritis,White,Bilateral,28,60,No,Smith & Nephew,Legion,4,posterior stabilized,Genesis II,2,Genesis II,15,high flex,Genesis II,32
@@ -1105,7 +1105,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 3,2013,85,Female,141,64,24.22,Osteoarthritis,White,Right,65,20,Yes,DePuy (J&J),Sigma,2.5,cruciate retaining,PFC Sigma,2.5,PFC Sigma,8,"curved,Fixed bearing",Triathlon Asymmetric Patella,35
 3,2013,67,Female,162,65,26.98,Osteoarthritis,White,Bilateral,33,50,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,9,standard,Triathlon Asymmetric Patella,32
 3,2013,66,Female,107,68,16.28,Osteoarthritis,White,Bilateral,35,50,No,DePuy (J&J),Sigma,4N,cruciate retaining,PFC Sigma,5,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,38
-4,2013,51,Female,128,63,22.69,"Rheumatoid arthritis, Inflammatory  non-infection",White,Bilateral,35,50,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
+4,2013,51,Female,128,63,22.69,Rheumatoid arthritis,White,Bilateral,35,50,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,11,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,32
 4,2013,62,Female,148,62,27.09,Osteoarthritis,White,Bilateral,38,45,No,Stryker,Triathlon,3,cruciate retaining,Triathlon,3,Triathlon,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,29
 3,2013,64,Female,180,64,30.92,Osteoarthritis,White,Bilateral,42,50,No,DePuy (J&J),Sigma,4N,cruciate retaining,PFC Sigma,3,PFC Sigma,8,"curved,Fixed bearing",Oval Dome Patella 3-peg,35
 4,2013,75,Female,140,63,24.82,Osteoarthritis,White,Bilateral,45,50,No,Stryker,Triathlon,2,cruciate retaining,Triathlon,3,Triathlon,9,standard,Triathlon Asymmetric Patella,29
@@ -1486,7 +1486,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2013,62,Male,220,68,33.48,Osteoarthritis,White,Bilateral,16,60,No,Smith & Nephew,Legion,6,cruciate retaining,Legion,7,Genesis II,11,high flex,Genesis II,35
 1,2013,51,Male,270,71,37.69,Osteoarthritis,White,Bilateral,27,45,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,6,Legion,11,high flex,Genesis II,35
 4,2013,57,Female,225,69,33.26,Osteoarthritis,White,Left,24,30,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,5,Legion,9,high flex,Triathlon Asymmetric Patella,32
-4,2013,76,Female,194,68,29.52,Osteoarthritis,White,Left,31,30,No,Smith & Nephew,Legion,6n,cruciate retaining,Genesis II,5,Genesis II,9,dished,Genesis II,32
+4,2013,76,Female,194,68,29.52,Osteoarthritis,White,Left,31,30,No,Smith & Nephew,Legion,6N,cruciate retaining,Genesis II,5,Genesis II,9,dished,Genesis II,32
 1,2013,77,Female,145,70,20.82,Osteoarthritis,White,Left,34,50,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,5,Legion,11,high flex,Genesis II,38
 1,2013,67,Male,248,71,34.62,Osteoarthritis,White,Left,42,50,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion,9,high flex,Genesis II,35
 3,2013,55,Female,182,63,32.27,Osteoarthritis,White,Left,44,30,No,Smith & Nephew,Legion,5N,posterior stabilized,Genesis II,5,Legion,11,high flex,Triathlon Asymmetric Patella,32
@@ -1501,7 +1501,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2013,68,Female,186,70,26.71,Osteoarthritis,White,Left,65,60,No,Smith & Nephew,Legion,6N,posterior stabilized,Genesis II,5,Genesis II,11,Constrained,Genesis II,32
 1,2013,77,Male,216,68,32.87,Osteoarthritis,White,Left,71,60,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion,9,high flex,Genesis II,35
 1,2013,85,Female,125,67,19.6,Osteoarthritis,White,Left,84,60,No,Stryker,Legion,6,cruciate retaining,Genesis II,5,Genesis II,11,standard,Genesis II,35
-4,2013,66,Female,158,64,27.14,Osteoarthritis,White,Right,74,50,No,Smith & Nephew,Legion,6n,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,29
+4,2013,66,Female,158,64,27.14,Osteoarthritis,White,Right,74,50,No,Smith & Nephew,Legion,6N,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,29
 1,2013,69,Male,192,72,26.06,Osteoarthritis,White,Right,65,60,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,6,Genesis II,11,high flex,Genesis II,38
 1,2013,68,Male,178,66,28.76,Osteoarthritis,White,Right,65,70,No,Smith & Nephew,Legion,5,cruciate retaining,Genesis II,5,Genesis II,13,high flex,Genesis II,35
 1,2013,66,Male,182,73,24.03,Osteoarthritis,White,Right,61,50,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion,13,high flex,Genesis II,38
@@ -1552,7 +1552,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 3,2013,84,Female,154,64,26.46,Osteoarthritis,White,Right,55,5,Yes,Zimmer,Nexgen Legacy,E,cruciate retaining,Nexgen Legacy,5,Nexgen Legacy,10,standard,NexGen Legacy,35
 1,2013,70,Male,242,70,34.75,Osteoarthritis,White,Left,66,80,Yes,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,7,Legion,9,high flex,Triathlon Asymmetric Patella,41
 1,2013,61,Male,190,70,27.29,Osteoarthritis,White,Right,55,80,Yes,Smith & Nephew,Legion,7,cruciate retaining,Legion,7,Genesis II,9,high flex,Genesis II,38
-3,2013,68,Female,145,60,28.34,Osteoarthritis,White,Right,65,60,No,Zimmer,Nexgen Legacy,D,posterior stabilized,Nexgen Legacy,2,Prolong,10,posterior stabilized,NexGen Legacy,32
+3,2013,68,Female,145,60,28.34,Osteoarthritis,White,Right,65,60,No,Zimmer,Nexgen Legacy,D,posterior stabilized,Nexgen Legacy,2,Nexgen,10,posterior stabilized,NexGen Legacy,32
 3,2013,76,Female,198,67,31.04,Osteoarthritis,White,Left,56,50,Yes,Zimmer,Nexgen Legacy,E,cruciate retaining,Nexgen Legacy,3,Nexgen Legacy,10,standard,NexGen Legacy,35
 3,2014,70,Female,210,65,34.98,Osteoarthritis,White,Bilateral,22,30,No,DePuy (J&J),Sigma,3,posterior stabilized,PFC Sigma,3,PFC Sigma,8,Fixed bearing,Oval Dome Patella 3-peg,35
 2,2014,83,Female,140,63,24.82,Osteoarthritis,White,Bilateral,38,0,No,Stryker,Triathlon,2,cruciate retaining,Triathlon,3,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,29
@@ -1684,7 +1684,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 3,2014,69,Male,183,71,25.55,Osteoarthritis,White,Left,50,70,Yes,DePuy (J&J),Attune,7,cruciate retaining,Attune,6,Attune,5,Fixed bearing,Attune,41
 5,2014,79,Male,180,72,24.43,Osteoarthritis,White,Right,69,70,Yes,Stryker,Triathlon,7,cruciate retaining,Triathlon,7,Triathlon X3,9,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,40
 3,2014,58,Female,200,68,30.44,Osteoarthritis,White,Right,60,60,Yes,DePuy (J&J),Attune,7,cruciate retaining,Attune,5,Attune,5,standard,Attune,35
-3,2014,66,Male,165,70,23.7,Osteoarthritis,White,Right,55,45,Yes,DePuy (J&J),Attune,73,cruciate retaining,Attune,7,Attune,5,Fixed bearing,Attune,41
+3,2014,66,Male,165,70,23.7,Osteoarthritis,White,Right,55,45,Yes,DePuy (J&J),Attune,7,cruciate retaining,Attune,7,Attune,5,Fixed bearing,Attune,41
 3,2014,54,Male,200,70,28.72,Post-trauma,White,Right,55,60,Yes,DePuy (J&J),Attune,7,cruciate retaining,Attune,8,Attune,5,Fixed bearing,Attune,41
 3,2014,66,Male,285,71,39.78,Osteoarthritis,White,Left,36,50,No,DePuy (J&J),Attune,8,cruciate retaining,Attune,7,Attune,6,Fixed bearing,Attune,41
 3,2014,76,Male,230,74,29.56,Osteoarthritis,White,Left,38,80,No,DePuy (J&J),Attune,8,posterior stabilized,Attune,10,Attune,10,posterior stabilized,Attune,41
@@ -1917,7 +1917,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2015,70,Male,160,68,24.35,Osteoarthritis,White,Right,79,90,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion CR XLPE,15,high flex,Genesis II,38
 1,2015,60,Male,220,71,30.71,Osteoarthritis,White,Right,74,90,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion CR XLPE,9,high flex,Genesis II,35
 4,2015,68,Female,199,69,29.41,Osteoarthritis,White,Right,67,45,No,Smith & Nephew,Legion,5,cruciate retaining,Genesis II,5,Legion CR XLPE,9,high flex,Genesis II,32
-1,2015,78,Male,210,72,28.51,Osteoarthritis,White,Right,64,70,No,Smith & Nephew,Legion,7+,cruciate retaining,Genesis II,6,Legion CR XLPE,11,high flex,Genesis II,41
+1,2015,78,Male,210,72,28.51,Osteoarthritis,White,Right,64,70,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,6,Legion CR XLPE,11,high flex,Genesis II,41
 4,2015,71,Female,185,66,29.89,Osteoarthritis,White,Right,53,50,No,Smith & Nephew,Legion,5,cruciate retaining,Genesis II,5,Legion,9,high flex,Genesis II,35
 1,2015,68,Male,297,70,42.65,Osteoarthritis,White,Right,52,5,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion CR XLPE,10,high flex,Genesis II,35
 1,2015,62,Female,170,66,27.46,Osteoarthritis,White,Right,45,65,No,Smith & Nephew,Legion,6N,cruciate retaining,Genesis II,5,Legion CR XLPE,9,high flex,Genesis II,32
@@ -1925,7 +1925,7 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 1,2015,55,Male,187,70,26.86,Osteoarthritis,White,Right,43,60,No,Smith & Nephew,Legion,6,cruciate retaining,Genesis II,6,Legion CR XLPE,10,high flex,Genesis II,35
 1,2015,62,Male,200,68,30.44,Osteoarthritis,White,Bilateral,42,50,No,Smith & Nephew,Legion,8,cruciate retaining,Genesis II,7,Legion CR XLPE,13,high flex,Genesis II,38
 1,2015,59,Male,210,71,29.32,Osteoarthritis,White,Bilateral,48,60,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,7,Legion CR XLPE,13,high flex,Genesis II,41
-1,2015,62,Male,200,68,30.44,Osteoarthritis,White,Bilateral,42,50,No,Smith & Nephew,Legion,8+,cruciate retaining,Genesis II,7,Legion CR XLPE,13,high flex,Genesis II,38
+1,2015,62,Male,200,68,30.44,Osteoarthritis,White,Bilateral,42,50,No,Smith & Nephew,Legion,8,cruciate retaining,Genesis II,7,Legion CR XLPE,13,high flex,Genesis II,38
 1,2015,62,Male,205,71,28.62,Osteoarthritis,White,Left,39,15,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,7,Legion CR XLPE,9,high flex,Genesis II,38
 1,2015,71,Male,230,68,35,Osteoarthritis,Hispanic,Right,74,80,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,7,Legion CR XLPE,9,high flex,Genesis II,41
 1,2015,71,Male,265,75,33.15,Osteoarthritis,White,Right,70,70,No,Smith & Nephew,Legion,7,cruciate retaining,Genesis II,7,Legion CR XLPE,9,high flex,Genesis II,41

@@ -140,6 +140,13 @@ evaluate(knee_int_no_influence)
 int_data2 = removeInfluential(knee_int2, knee)
 knee_int2_no_influence = lm(KneeScore_Surgeon ~ Surgeon + Age:Race + Side * KneeScore_Patient * TibialInsertModel, data = int_data2)
 evaluate(knee_int2_no_influence)
+
+bic_int = lm(KneeScore_Surgeon ~ Age:Side:KneeScore_Patient, data = knee)
+evaluate(bic_int)
+
+data3 = removeInfluential(bic_int, knee)
+bic_no_inf = lm(KneeScore_Surgeon ~ Age:Side:KneeScore_Patient, data = data3)
+evaluate(bic_no_inf)
 ```
 
 
@@ -402,7 +409,17 @@ train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(pat_model_10_bic, 
 Interestingly, again the models fit on the dataset without leverages fares worse on test RMSE.
 
 ## Conclusion
-
+1. Does the satisfactory score is dependent on different age groups?
+2. Score improvement of GPS vs manual placement? 
+3. Does score depends on the gender?
+4. Does GPS improved score based on surgeons?
+5. Are devices from various vendors more suitable for GPS placement or not?
+6. Satisfacory scores depends on BMI, H, W?
+7. Are some vendors more suitable various BMI, H, W?
+8. Is there any dependencies between scores and various replacemnt components?
+9. What components seems to matter the most on the score?
+10. Is there any relationship between components from various vendors and race?
+11. Based on race and gender which has the higher score?
 
 
 ## Appendix

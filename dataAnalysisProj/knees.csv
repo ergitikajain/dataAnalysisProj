@@ -363,9 +363,9 @@ Surgeon,Year,Age,Gender,Weight,Height,BMI,Diagnosis,Race,Side,KneeScore_Surgeon,
 3,2011,45,Male,200,74,25.7,Osteoarthritis,White,Right,51,70,Yes,DePuy (J&J),Sigma,4,cruciate retaining,PFC Sigma,4,PFC Sigma Cross-Linked,12.5,curved,Patella Round Dome,38
 3,2011,78,Female,128,67,20.07,Osteoarthritis,White,Right,44,80,Yes,DePuy (J&J),Sigma,4,cruciate retaining,PFC Sigma,4,PFC Sigma,8,"curved,Fixed bearing",Patella Round Dome,38
 3,2011,76,Female,188,67,29.47,Osteoarthritis,White,Right,21,20,Yes,DePuy (J&J),Sigma,4N,cruciate retaining,MBT Keel,3,Rotating Platform,10,curved,Oval Dome Patella 3-peg,38
-1,2011,74,Male,165,67,25.87,Osteoarthritis,Indian Sub-Continent,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
+1,2011,74,Male,165,67,25.87,Osteoarthritis,Asian,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
 2,2011,60,Male,210,70,30.16,Osteoarthritis,Hispanic,Bilateral,45,35,No,Stryker,Triathlon,5,cruciate retaining,Triathlon,5,Triathlon X3,13,standard,Triathlon Asymmetric Patella,32
-1,2011,74,Male,165,67,25.87,Osteoarthritis,Indian Sub-Continent,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
+1,2011,74,Male,165,67,25.87,Osteoarthritis,Asian,Bilateral,40,60,No,Smith & Nephew,Legion,4,cruciate retaining,Genesis II,5,Genesis II,9,high flex,Genesis II,35
 5,2011,66,Male,205,73,27.07,Osteoarthritis,White,Left,39,45,No,Stryker,Triathlon,5,posterior stabilized,Triathlon,5,Triathlon,13,CS (Condylar Stabilizing),Triathlon Asymmetric Patella,40
 2,2011,63,Male,290,68,44.13,Osteoarthritis,White,Left,40,50,No,Stryker,Triathlon,4,cruciate retaining,Triathlon,5,Triathlon X3,11,standard,Triathlon Asymmetric Patella,35
 4,2011,60,Male,217,71,30.29,Osteoarthritis,White,Left,47,50,No,Stryker,Triathlon,6,posterior stabilized,Triathlon,5,Triathlon X3,9,standard,Triathlon Asymmetric Patella,35

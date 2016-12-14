@@ -173,9 +173,17 @@ While removing the predictors we get a better model at reasonable $\alpha$, it d
 Using Forward AIC
 
 ```{r}
-surgeon_model_for_aic = step(surgeon_full_additive_model, direction = "forward", trace = 0)
-evaluate(surgeon_model_for_aic)
-anova(surgeon_model_for_aic, surgeon_full_additive_model)
+surgeon_model_back_aic = step(surgeon_full_additive_model, direction = "backward", trace = 0)
+evaluate(surgeon_model_back_aic)
+anova(surgeon_model_back_aic, surgeon_full_additive_model)
+```
+
+Removing the Influential observations and running AIC again-
+
+```{r}
+clean_dataset_aic = removeInfluential(surgeon_model_back_aic, train_data)
+surgeon_full_additive_model_clean = lm(KneeScore_Surgeon ~ ., data = clean_dataset_aic)
+surgeon_model_aic_clean = step(surgeon_full_additive_model_clean, direction = "backward", trace = 0)
 ```
 
 
@@ -197,10 +205,11 @@ Lets try the interaction between the predictors which we got in the model select
 surgeon_model_back_bic_int = lm(KneeScore_Surgeon ~ Age * Side * KneeScore_Patient, data = train_data)
 evaluate(surgeon_model_back_bic_int)
 anova(surgeon_model_back_bic_int, surgeon_full_additive_model)
+coef(surgeon_model_back_bic_int)
 ```
 
 
-Now, removing the influential observations and evaluating BIC again.
+Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Cook's Distance` values and evaluating BIC again.
 
 ```{r}
 clean_dataset = removeInfluential(surgeon_model_back_bic, train_data)
@@ -216,13 +225,19 @@ How about interaction on clean dataset-
 ```{r}
 surgeon_model_back_bic_int_clean = lm(KneeScore_Surgeon ~ Age * Side * KneeScore_Patient, data = clean_dataset)
 evaluate(surgeon_model_back_bic_int_clean)
-anova(surgeon_model_back_bic_int_clean, surgeon_full_additive_model_clean)
 ```
 
+comparing BIC and Interaction Models 
+
+```{r}
+anova(surgeon_model_back_bic_clean, surgeon_model_back_bic_int_clean)
+```
+
+Based on Anova test we can reject the `surgeon_model_back_bic_clean` model and prefer surgeon_model_back_bic_int_clean.
 
 Next, we will evaluate the RMSE of the best performing models thus far.
 
-```{r}
+```{r echo=FALSE}
 options(warn=-1)
 
 full_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_full_additive_model, test_data))
@@ -231,8 +246,14 @@ full_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_full_additive_mo
 test_mod_8 = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_eight, test_data))
 train_mod_8 = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_eight, train_data))
 
-aic_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_for_aic, test_data))
-aic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_for_aic, train_data))
+clean_full_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_full_additive_model_clean, test_data))
+clean_full_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_full_additive_model_clean, train_data))
+
+aic_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_back_aic, test_data))
+aic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_back_aic, train_data))
+
+clean_aic_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_aic_clean, test_data))
+clean_aic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_aic_clean, train_data))
 
 bic_test = rmse(test_data$KneeScore_Surgeon, predict(surgeon_model_back_bic, test_data))
 bic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_back_bic, train_data))
@@ -254,44 +275,13 @@ clean_int_bic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_b
 | `Model AIC`  | `r aic_train`      | `r aic_test`    |
 | `Model BIC`  | `r bic_train`      | `r bic_test`    |
 | `Model Int`  | `r int_train `     | `r int_test`    |
+| `Model Clean All+`  | `r clean_full_train ` | `r clean_full_test`|
+| `Model Clean AIC`  | `r clean_aic_train ` | `r clean_aic_test`|
 | `Model Clean BIC`  | `r clean_bic_train ` | `r clean_bic_test`|
 | `Model Clean Int`  | `r clean_int_bic_train ` | `r clean_int_bic_test`|
 
-The full model delivers the best RMSE as well as 
+Interaction model gives the BEST RMSE also low Cross Validation and High $Adjusted R^2$, so we will consider this as the best model to predict the KneeScore_Surgeon.
 
-Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Cook's Distance` values.
-
-```{r}
-new_dataframe = removeInfluential(surgeon_model_eight, knee)
-surgeon_model_nine = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
-evaluate(surgeon_model_nine)
-```
-
-This does seem to be of moderate benefit in relation to Adjusted $R^2$ and Cross Validation.
-
-We will evaluate the same model one again after removing the identified large hat values.
-
-```{r}
-remove_hat_dataframe = removeLargeHatValues(surgeon_model_nine, new_dataframe)
-surgeon_model_ten = lm(KneeScore_Surgeon ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
-evaluate(surgeon_model_ten)
-```
-
-Removing the large hat values decreased the Cross Validation score.  Perhaps we can find a better model by running BIC on the modified dataframe.
-
-```{r}
-n = length(resid(surgeon_model_ten))
-surgeon_model_10_bic = step(surgeon_model_ten, direction = "backward", k = log(n), trace = 0)
-evaluate(surgeon_model_10_bic)
-coef(surgeon_model_10_bic)
-```
-
-Despite the reduction in leveraged values the selected model is no better than preceding models.
-
-
-
-
-Removing the large hat values has had the opposite intended effect of decreasing the RMSE values.
 
 ### Knee Score Patient
 

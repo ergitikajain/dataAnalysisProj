@@ -9,7 +9,7 @@ author:
 - Gitika Jain (gitikaj2)
 - Heather Sewak (hsewak2)
 - Ionel Miu (imiu2)
-- Jared Michael Colbert (jaredc2)
+- Jared Colbert (jaredc2)
 ---
 #  Knee Replacement Surgery Outcome
 
@@ -23,18 +23,9 @@ We hope to create a model that can predict each of the scores based on a variety
 ## Background information
 This data has been collected from a Southern California Hospital in collaboration with the Shiley Center for Orthopedic Research.  The data is used for both clinical research and postoperative monitoring of implant survivorship.  All patient specific information has been removed from the data so it adheres to the Health Insurance Portability and Accountability Act (HIPAA).
 
-## Overview of the Work Flow
-We formed our group by advertising on the course forum site and Slack chat.
-After the group had been formed, the first step was to decide on a topic and a data set for the selected topic.
-Next, after our proposal had been approved, we cleaned up the data and started working towards finding a final model that is most suitable for our data set.
-To reach the final model, each of us, worked independently to come up with a list of models.
-Models were presented and discussed during our regular meetings via Zoom where ideas were exchanged.
-Eventaully, we converged and decided on a final model that has been used for the work presented here.
-
 ## Statement
 We hope to determine the impact a particular surgeon or the type of implants used has on the patient's outcome after surgery.  We are also interested in exploring the potential relationship between anthropomorphic factors and the patient's postoperative satisfaction.  Finally, we would like to understand if the considerable expense of computer navigation in knee replacement leads to better postoperative scores. Nevertheless, we keep our options opened to investigate other aspects that were not 'visible' or thought about but might reveal themselves as we move on with the project.
 
-Here we may consider *KneeScore\_Surgeon* or *KneeScore\_Patient* as response and *Age, Gender, Weight, Height, BMI, Race, Side, Manufacturer* as predictors. *Gender, Race, Side and Manufacturer* are some of the categorical predictors and *Age, Height, Weight and BMI* are numerical predictors.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -44,6 +35,7 @@ purple = '#772299'; green = '#3FE500'; red = '#E50000'; lightblue = '#229999'; b
 ```
 
 ```{r}
+set.seed(19920429)
 knee = read.csv('knees.csv')
 knee$Surgeon = as.factor(knee$Surgeon)
 knee$Year = as.factor(knee$Year)
@@ -65,14 +57,13 @@ showPlots = function(model) {
 #Function to calculate various statistics which we use to evaluate the model
 evaluate = function(model){
   # Run each of the tests
-  lambda = 1.000001 # this is a hack so the function will return a CrossValidation score - HatValues of 1.0 are causing a division by zero error.
   shapiroTest = shapiro.test(resid(model))
   bpTest = bptest(model)
   rSquared = summary(model)$r.squared
   adjRSquared = summary(model)$adj.r.squared
-  loocv = sqrt(mean((resid(model) / (lambda - hatvalues(model))) ^ 2))
+  loocv = sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
   large_hat = sum(hatvalues(model) > 2 * mean(hatvalues(model)))
-  large_resid = sum(rstandard(model)[abs(rstandard(model)) > 2]) / (length(rstandard(model) + lambda))
+  large_resid = sum(rstandard(model)[abs(rstandard(model)) > 2]) / length(rstandard(model))
   large_cooks = sum(cooks.distance(model) > 4 / length(cooks.distance(model)))
   
   # Collect tests in dataframe
@@ -81,7 +72,6 @@ evaluate = function(model){
 
   summary_output = cbind(rowNames, values)
   show(summary_output)
-  showPlots(model)
 }
 # find and remove all influential values and return the resulting dataframe
 removeInfluential = function(model, data){
@@ -108,6 +98,26 @@ rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
 
 ```
 
+### Synopsis of Workflow
+
+#### Outline Questions
+After we had obtained a copy of the current patient database we spent some time inspecting each of the columns to ensure that each member of the team had a consistent understanding of what each datapoint measures and how it is collected.  We then crafted a series of questions we could ask and speculated on how each of the datapoints might be organized in various models.  It was apparent to us that the response variables would have to be the Surgeon or Patient scores since each of our questions sought to explain factors that determine a patient's satisfaction after surgery.  The two scores are the only concrete datapoint with which we could measure a post-surgical outcome.
+
+#### Data Preparation
+The original dataset was full of errant or missing fields which required cleaning.  Because the complete dataset is quite large, we were able to drop all rows with missing or NA values while retaining nearly two thousand entries.  We then used some visualization techniques to get a 'feel' for which items may be appropriate to utilize in a model.  Finally, the data was separated into training and testing groups.
+
+#### Initial Model
+We then began model creation starting with a full additive model.  Upon evaluation we found the model to be a poor fit with metrics not satisfying any of our criteria for a reasonable model.  While testing for leverages we spotted some errant entries that remained in the dataset so a second cleaning pass through the data was required.
+
+#### Selective, AIC, BIC and Interactive Models
+Next we checked for variance between the full model and all iterations of models with a single predictor removed.  This process resulted in a collection of six significan predictors which were then utilized in fitting a smaller model.  AIC and BIC selection was performed also performed and the assumptions were tested after each model was created.  Since no antecedent model performed as hoped, we turned to a series of interactive models.  We utilized the anova function extensively to determine if the variance between models was significant.
+
+#### Removing Leverage
+We then hypothesized that the outliers in the data might be hindering our ability to fit a model with a sufficiently hight Adjusted $R^2$.  The values with a high Cook's Distance were identified and removed from subsequent models.
+
+#### Evaluation with RMSE
+Finally, we evaluated each of the fitted models on test data unseen by any model.  The Root Mean Square Error was the final metric utilized to determine the quality of each model.  Based upon the normality of the residuals, Adjusted R-Squared, Cross Validation and RMSE we selected a single model as the best model.
+
 ### Knee Score Surgeon
 
 Before moving onto the formal analysis of our data set, we started by performing visual inspection by plotting dependencies among our the variables.
@@ -116,18 +126,6 @@ Our choice was to use `scatterplotMatrix` from the `car` package as it plots reg
 
 ```{r, fig.height=10, fig.width=12, warning=FALSE}
 scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + Surgeon + Year + Age + Gender + Weight + Height, span=0.7, data=knee)
-```
-
-```{r, fig.height=10, fig.width=12, warning=FALSE}
-scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + BMI + Diagnosis + Race + Side + GPS + Manufacturer, span=0.7, data=knee)
-```
-
-```{r, fig.height=10, fig.width=12, warning=FALSE}
-scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + FemoralComponentModel + FemoralComponentSize + FemoralComponentType + TibialTrayModel + TibialInsertType, span=0.7, data=knee)
-```
-
-```{r, fig.height=10, fig.width=12, warning=FALSE}
-scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient + TibialTraySize + TibialInsertModel + TibialInsertWidth + PatellaModel + PatellaDiameter, span=0.7, data=knee)
 ```
 
 **Comments:** Based on the above graphics, `KneeScore_Surgeon, KneeScore_Patient` seems to behave similarly across all variables. This is expected as both, surgeon and patient, should be in consensus in regards to the success or quality of a procedure.
@@ -141,9 +139,9 @@ scatterplotMatrix(~ KneeScore_Surgeon + KneeScore_Patient, span=0.7, data=knee)
 The distribution of `KneeScore_Surgeon` which reflects the score of a procedure assigned be the `Surgeon` is unimodal distribution versus a multimodal distribution of `KneeScore_Patient`, which is the score assigned by `Patient`.
 Our explanation of this is that `Surgeon` assigns any number between 1 and 100 without any discretion whereas `Patient` has a tendency to round up the score to the nearest fifth (Ex: 5, 10, 35, 50, etc) which creates the multi-picks of the distribution. 
 
-Begin by fitting a full additive model as a baseline and evaluating.
+Begin by splitting the data and fitting a full additive model as a baseline.
 
-```{r}
+```{r, fig.height=5, fig.width=12, warning=FALSE}
 sample_idx = sample(1:nrow(knee), 1500)
 train_data = knee[sample_idx, ]
 test_data = knee[-sample_idx, ]
@@ -151,21 +149,6 @@ surgeon_full_additive_model = lm(KneeScore_Surgeon ~ ., data = train_data)
 evaluate(surgeon_full_additive_model)
 showPlots(surgeon_full_additive_model)
 ```
-
-The baseline model has many large hat values.  Let's try to understand why.
-
-```{r}
-largeHat = which(hatvalues(surgeon_full_additive_model) > (2 * mean(hatvalues(surgeon_full_additive_model))))
-print(knee[689, ])
-```
-After inspection of the rows that represent the large hat values it seems that there are a preponderance of values that are either errant entries or valid, but rare entries.  For example, the `Race` predictor has only two entries for `Mid-East Arabian`.  First we circle back on the original dataset and clean the identified errant entries.
-
-```{r}
-print(knee[612, ])
-print(knee[1496, ])
-```
-
-Refitting the model on the cleaned data only shows a marginal impact on the model so we move on to some other methods.
 
 Next we will try to determine which predictors are significant by comparing the full model to models each with a single predictor removed.  Evaluation of this code is set to false for convienience.  Comments show the significance of each test.
 
@@ -228,7 +211,7 @@ evaluate(surgeon_selective_model)
 anova(surgeon_selective_model, surgeon_full_additive_model)
 ```
 
-The evaluation doesn't show much improvement and anova rejects the significance of the smaller model.
+The evaluation doesn't show much improvement and the large anova value suggests we shouldn't reject the null hypothesis.
 
 We will attempt to utilize AIC and BIC approaches and evaluate the results.
 
@@ -238,19 +221,20 @@ evaluate(surgeon_model_back_aic)
 anova(surgeon_model_back_aic, surgeon_full_additive_model)
 ```
 
-Removing the Influential observations and running AIC again-
+Again, we are unable to select the smaller AIC selected model as a better model. 
 
-```{r}
+```{r, fig.height=5, fig.width=12, warning=FALSE}
 clean_dataset_aic = removeInfluential(surgeon_model_back_aic, train_data)
 surgeon_full_additive_model_clean = lm(KneeScore_Surgeon ~ ., data = clean_dataset_aic)
 surgeon_model_aic_clean = step(surgeon_full_additive_model_clean, direction = "backward", trace = 0)
 evaluate(surgeon_model_aic_clean)
+showPlots(surgeon_model_aic_clean)
 anova(surgeon_model_aic_clean, surgeon_full_additive_model_clean)
-
 ```
 
+Once again, the anova result is not significant for the AIC model but we have improved on both the $Adjusted R^2$ and Cross Validation values.
 
-Utilize a Bayesian Information Criterion approach and evaluate the selected model.
+Next we will utilize a Bayesian Information Criterion approach and evaluate the selected model.
 
 ```{r}
 n = length(resid(surgeon_full_additive_model))
@@ -260,9 +244,9 @@ coef(surgeon_model_back_bic)
 anova(surgeon_model_back_bic, surgeon_full_additive_model)
 ```
 
-The resulting BIC model scores marginally better in Cross Validation though the anova results clearly prefer the full additive model.
+The BIC p-value is significant, so we select the smaller model.
 
-Lets try the interaction between the predictors which we got in the model selected by Backward BIC.
+Let's try the interaction between the predictors which we got in the model selected by Backward BIC.
 
 ```{r}
 surgeon_model_back_bic_int = lm(KneeScore_Surgeon ~ Age * Side * KneeScore_Patient, data = train_data)
@@ -271,8 +255,7 @@ anova(surgeon_model_back_bic_int, surgeon_full_additive_model)
 coef(surgeon_model_back_bic_int)
 ```
 
-
-Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Cook's Distance` values and evaluating BIC again.
+That approach didn't help us much.  Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Cook's Distance` values and evaluate BIC again.
 
 ```{r}
 clean_dataset = removeInfluential(surgeon_model_back_bic, train_data)
@@ -283,20 +266,22 @@ evaluate(surgeon_model_back_bic_clean)
 anova(surgeon_model_back_bic_clean, surgeon_full_additive_model_clean)
 ```
 
-How about interaction on clean dataset-
+We get a definative p-value and can confidently select the smaller model.
 
 ```{r}
 surgeon_model_back_bic_int_clean = lm(KneeScore_Surgeon ~ Age * Side * KneeScore_Patient, data = clean_dataset)
 evaluate(surgeon_model_back_bic_int_clean)
 ```
 
-comparing BIC and Interaction Models 
+Now we seem to be making some progress.  The interaction model on the dataset without large Cook's Distance values shaves a couple points off our cross validation score and increases $Adjusted R^2$.
+
+Finally, we will compare the BIC and Interaction Models. 
 
 ```{r}
 anova(surgeon_model_back_bic_clean, surgeon_model_back_bic_int_clean)
 ```
 
-Based on Anova test we can reject the `surgeon_model_back_bic_clean` model and prefer surgeon_model_back_bic_int_clean.
+Based on Anova test we can reject the `surgeon_model_back_bic_clean` model and prefer `surgeon_model_back_bic_int_clean`.
 
 Next, we will evaluate the RMSE of the best performing models thus far.
 
@@ -337,137 +322,197 @@ clean_int_bic_train = rmse(train_data$KneeScore_Surgeon, predict(surgeon_model_b
 | `Selective Model`   | `r sel_train`      | `r sel_test`    |
 | `Model AIC`  | `r aic_train`      | `r aic_test`    |
 | `Model BIC`  | `r bic_train`      | `r bic_test`    |
-| `Model Int`  | `r int_train `     | `r int_test`    |
+| `Model Int`  | `r int_train `     | **`r int_test`**    |
 | `Model Clean All+`  | `r clean_full_train ` | `r clean_full_test`|
 | `Model Clean AIC`  | `r clean_aic_train ` | `r clean_aic_test`|
 | `Model Clean BIC`  | `r clean_bic_train ` | `r clean_bic_test`|
 | `Model Clean Int`  | `r clean_int_bic_train ` | `r clean_int_bic_test`|
 
-Interaction model gives the BEST RMSE also low Cross Validation and High $Adjusted R^2$, so we will consider this as the best model to predict the KneeScore_Surgeon.
-
+The interaction model gives the BEST RMSE with low Cross Validation and High $Adjusted R^2$, so we will consider this as the best model to predict the KneeScore_Surgeon.
 
 ### Knee Score Patient
 
 Begin by fitting a full additive model as a baseline and evaluating.
 
 ```{r, fig.height=5, fig.width=12}
-pat_full_additive_model = lm(KneeScore_Patient ~ ., data = knee)
+pat_full_additive_model = lm(KneeScore_Patient ~ ., data = train_data)
 evaluate(pat_full_additive_model)
 ```
 
-The baseline model has many large leverage values, which, upon inspection may be coming from several of the implant fields.  Perhaps removing the suspect implant predictors will help improve the model.
+Next we will try to determine which predictors are significant by comparing the full model to models each with a single predictor removed.  Evaluation of this code is set to false for convienience.  Comments show the significance of each test.
+
+```{r, eval=FALSE}
+patient_full_additive_model = lm(KneeScore_Patient ~ ., data = knee)
+summary(patient_full_additive_model)
+surgeon_additive_model = lm(KneeScore_Patient ~ .-Surgeon, data = knee)
+Gender_additive_model = lm(KneeScore_Patient ~ .-Gender, data = knee)
+Race_additive_model = lm(KneeScore_Patient ~ .- Race, data = knee)
+Year_additive_model = lm(KneeScore_Patient ~ .- Year, data = knee)
+Age_additive_model = lm(KneeScore_Patient ~ .- Age, data = knee)
+Weight_additive_model = lm(KneeScore_Patient ~ .- Weight, data = knee)
+Height_additive_model = lm(KneeScore_Patient ~ .- Height, data = knee)
+BMI_additive_model = lm(KneeScore_Patient ~ .- BMI, data = knee)
+Diagnosis_additive_model = lm(KneeScore_Patient ~ .- Diagnosis, data = knee)
+Side_additive_model = lm(KneeScore_Patient ~ .- Side, data = knee)
+KneeScore_Surgeon_additive_model = lm(KneeScore_Patient ~ .- KneeScore_Surgeon, data = knee)
+GPS_additive_model = lm(KneeScore_Patient ~ .- GPS, data = knee)
+Manufacturer_additive_model = lm(KneeScore_Patient ~ .- Manufacturer, data = knee)
+FemoralComponentModel_additive_model = lm(KneeScore_Patient ~ .- FemoralComponentModel, data = knee)
+FemoralComponentSize_additive_model = lm(KneeScore_Patient ~ .- FemoralComponentSize, data = knee)
+FemoralComponentType_additive_model = lm(KneeScore_Patient ~ .- FemoralComponentType, data = knee)
+TibialTrayModel_additive_model = lm(KneeScore_Patient ~ .- TibialTrayModel, data = knee)
+TibialTraySize_additive_model = lm(KneeScore_Patient ~ .- TibialTraySize, data = knee)
+TibialInsertModel_additive_model = lm(KneeScore_Patient ~ .- TibialInsertModel, data = knee)
+TibialInsertWidth_additive_model = lm(KneeScore_Patient ~ .- TibialInsertWidth, data = knee)
+TibialInsertType_additive_model = lm(KneeScore_Patient ~ .- TibialInsertType, data = knee)
+PatellaModel_additive_model = lm(KneeScore_Patient ~ .- PatellaModel, data = knee)
+PatellaDiameter_additive_model = lm(KneeScore_Patient ~ .- PatellaDiameter, data = knee)
+anova(surgeon_additive_model,patient_full_additive_model)  ## Not significant Pr(>F) 0.3327
+anova(Gender_additive_model,patient_full_additive_model)  ## Significant Pr(>F) 0.001174 **
+anova(Race_additive_model,patient_full_additive_model)  ## Some significant Pr(>F) 0.03625 *
+anova(Year_additive_model,patient_full_additive_model)   ## Not significant Pr(>F) 0.3122
+anova(Age_additive_model,patient_full_additive_model)  ## Significant Pr(>F) 2.2e-16 ***
+anova(Weight_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.06985
+anova(Height_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.05945
+anova(BMI_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.7246
+anova(Diagnosis_additive_model,patient_full_additive_model)  ## Some significance Pr(>F) 0.03575
+anova(Side_additive_model,patient_full_additive_model)  ## Not significant Pr(>F) 0.5652
+anova(KneeScore_Surgeon_additive_model,patient_full_additive_model)  ## Significant Pr(>F) 2.2e-16 ***
+anova(GPS_additive_model,patient_full_additive_model)  ## Not significant Pr(>F) 0.2498
+anova(Manufacturer_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.3298
+anova(FemoralComponentModel_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.1546
+anova(FemoralComponentSize_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.1138
+anova(FemoralComponentType_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.7325
+anova(TibialTrayModel_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.1683
+anova(TibialTraySize_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.6308
+anova(TibialInsertModel_additive_model,patient_full_additive_model)  ## Not significant Pr(>F) 0.06147
+anova(TibialTraySize_additive_model,patient_full_additive_model)  ## Not significant Pr(>F) 0.6308
+anova(TibialInsertModel_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.06147
+anova(TibialInsertWidth_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.3909
+anova(TibialInsertType_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.4428
+anova(PatellaModel_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.2525
+anova(PatellaDiameter_additive_model,patient_full_additive_model) ## Not significant Pr(>F) 0.15
+```
 
 ```{r, fig.height=5, fig.width=12}
-pat_model_eight = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = knee)
-evaluate(pat_model_eight)
+pat_selective_model = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = train_data)
+evaluate(pat_selective_model)
 ```
 
 ```{r}
-anova(pat_model_eight, pat_full_additive_model)
+anova(pat_selective_model, pat_full_additive_model)
 ```
 
-While removing the predictors doesn't yield a definitively better model at a reasonable $\alpha$, it does increase adjusted $R^2$ and slightly improves the cross validation score.
+Backward AIC
+```{r, fig.height=5, fig.width=12}
+pat_aic = step(pat_full_additive_model, direction = "backward", trace = 0)
+evaluate(pat_aic)
+anova(pat_aic, pat_full_additive_model)
+```
 
-Utilize a Bayesian Information Criterion approach and evaluate the selected model.
+The anova results show to reject the AIC model when compared to the full model.
+
+Backward AIC - Cleaned
+```{r, fig.height=5, fig.width=12}
+clean_data_aic = removeInfluential(pat_aic, train_data)
+pat_full_additive_model_clean = lm(KneeScore_Patient ~ ., data = clean_data_aic)
+pat_aic_clean = step(pat_full_additive_model_clean, direction = "backward", trace = 0)
+evaluate(pat_aic_clean)
+anova(pat_aic_clean, pat_full_additive_model_clean)
+```
+
+The AIC cleaned model yields an adjusted $R^2$ value of 0.2901856 and an cross validation of 15.42217 which is  better than pat_aic. However, when comparing the cleaned AIC model with the cleaned full additive model, the anova test rejects the cleaned AIC model.
+
+Backward BIC
 
 ```{r, fig.height=5, fig.width=12}
 n = length(resid(pat_full_additive_model))
-pat_model_back_bic = step(pat_full_additive_model, direction = "backward", k = log(n), trace = 0)
-evaluate(pat_model_back_bic)
-anova(pat_model_back_bic, pat_full_additive_model)
+pat_bic = step(pat_full_additive_model, direction = "backward", k = log(n), trace = 0)
+evaluate(pat_bic)
+anova(pat_bic, pat_full_additive_model)
 ```
 
-The resulting BIC model scores marginally better in cross validation though the Anova results clearly prefer the full additive model.
+The BIC model results in an adjusted $R^2$ value of 0.2458513 and and CV of 16.87071 When compared to the full model, Anova prefers the BIC model.
+
+Backward BIC - Cleaned
+```{r, fig.height=5, fig.width=12}
+clean_data_bic = removeInfluential(pat_bic, train_data)
+pat_full_additive_model_clean_bic = lm(KneeScore_Patient ~ ., data = clean_data_bic)
+n = length(resid(pat_full_additive_model_clean_bic))
+pat_bic_clean = step(pat_full_additive_model_clean_bic, direction = "backward", k = log(n), trace = 0)
+evaluate(pat_bic_clean)
+anova(pat_bic_clean, pat_full_additive_model_clean_bic)
+```
+
+The cleaned BIC results shows an improvement in the adjusted $R^2$ value and CV 0.2638423 and 13.58247 respectively. Anova results show to accept the cleaned BIC model as opposed to the cleaned full model.
+
+Interaction Models
+```{r, fig.height=5, fig.width=12}
+pat_bic_int = lm(KneeScore_Patient ~ Age * Weight * Height * Gender * KneeScore_Surgeon, data = train_data)
+evaluate(pat_bic_int)
+anova(pat_bic_int, pat_full_additive_model )
+```
+
+Interaction Models - Cleaned
+```{r, fig.height=5, fig.width=12}
+pat_bic_int_clean = lm(KneeScore_Patient ~ Age * Weight * Height * Gender * KneeScore_Surgeon, data = clean_data_bic)
+evaluate(pat_bic_int_clean)
+anova(pat_bic_int_clean, pat_bic_clean)
+```
+
+The cleaned interaction model results in an adjusted $R^2$ value of 0.2612025 and CV of 13.6915. The anova test rejects the cleaned interaction model when compared to the BIC model.
 
 Next, we will evaluate the RMSE of the best performing models thus far.
 
-```{r}
+```{r eval=FALSE}
 options(warn=-1)
-sample_idx = sample(1:nrow(knee), 1500)
-train_data = knee[sample_idx, ]
-test_data = knee[-sample_idx, ]
 
-rmse  = function(actual, predicted) {  sqrt(mean((actual - predicted) ^ 2))}
+full_test = rmse(test_data$KneeScore_Patient, predict(pat_full_additive_model, test_data))
+full_train = rmse(train_data$KneeScore_Patient, predict(pat_full_additive_model, train_data))
 
-pat_full_test = rmse(test_data$KneeScore_Patient, predict(pat_full_additive_model, test_data))
-pat_full_train = rmse(train_data$KneeScore_Patient, predict(pat_full_additive_model, train_data))
+sel_test = rmse(test_data$KneeScore_Patient, predict(pat_selective_model, test_data))
+sel_train = rmse(train_data$KneeScore_Patient, predict(pat_selective_model, train_data))
 
-pat_test_mod_8 = rmse(test_data$KneeScore_Patient, predict(pat_model_eight, test_data))
-pat_train_mod_8 = rmse(train_data$KneeScore_Patient, predict(pat_model_eight, train_data))
+clean_full_test = rmse(test_data$KneeScore_Patient, predict(pat_full_additive_model_clean, test_data))
+clean_full_train = rmse(train_data$KneeScore_Patient, predict(pat_full_additive_model_clean, train_data))
 
-pat_bic_test = rmse(test_data$KneeScore_Patient, predict(pat_model_back_bic, test_data))
-pat_bic_train = rmse(train_data$KneeScore_Patient, predict(pat_model_back_bic, train_data))
+aic_test = rmse(test_data$KneeScore_Patient, predict(pat_aic, test_data))
+aic_train = rmse(train_data$KneeScore_Patient, predict(pat_aic, train_data))
+
+clean_aic_test = rmse(test_data$KneeScore_Patient, predict(pat_aic_clean, test_data))
+clean_aic_train = rmse(train_data$KneeScore_Patient, predict(pat_aic_clean, train_data))
+
+bic_test = rmse(test_data$KneeScore_Patient, predict(pat_bic, test_data))
+bic_train = rmse(train_data$KneeScore_Patient, predict(pat_bic, train_data))
+
+int_test = rmse(test_data$KneeScore_Patient, predict(pat_bic_int, test_data))
+int_train = rmse(train_data$KneeScore_Patient, predict(pat_bic_int, train_data))
+
+clean_bic_test = rmse(test_data$KneeScore_Patient, predict(pat_bic_clean, test_data))
+clean_bic_train = rmse(train_data$KneeScore_Patient, predict(pat_bic_clean, train_data))
+
+clean_int_bic_test = rmse(test_data$KneeScore_Patient, predict(pat_bic_int_clean, test_data))
+clean_int_bic_train = rmse(train_data$KneeScore_Patient, predict(pat_bic_int_clean, train_data))
 ```
 
 | Model        | Train RMSE         | Test RMSE       |
 |--------------|--------------------|-----------------|
 | `Model All+` | `r full_train`     | `r full_test`   |
-| `Model 8`    | `r pat_train_mod_8`    | `r pat_test_mod_8`  |
-| `Model BIC`  | `r pat_bic_train`      | `r pat_bic_test`    |
+| `Selective Model`   | `r sel_train`      | `r sel_test`    |
+| `Model AIC`  | `r aic_train`      | `r aic_test`    |
+| `Model BIC`  | `r bic_train`      | `r bic_test`    |
+| `Model Int`  | `r int_train `     | `r int_test`    |
+| `Model Clean All+`  | `r clean_full_train ` | `r clean_full_test`|
+| `Model Clean AIC`  | `r clean_aic_train ` | `r clean_aic_test`|
+| `Model Clean BIC`  | `r clean_bic_train ` | `r clean_bic_test`|
+| `Model Clean Int`  | `r clean_int_bic_train ` | `r clean_int_bic_test`|
 
-The additive model with all predictors has the best RMSE values.
 
-Perhaps removing some influential data points will assist in creating a better model.  Next we remove influential points that satisfy the criteria for `Large Leverage`, `Large Cook's Distance` and `Large RStandard` values.
-
-```{r}
-new_dataframe = removeInfluential(pat_model_eight, knee)
-pat_model_nine = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = new_dataframe)
-evaluate(pat_model_nine)
-```
-
-This does seem to be of moderate benefit in relation to adjusted $R^2$ and cross validation.
-
-We will evaluate the same model once again after removing the identified large hat values.
-
-```{r}
-remove_hat_dataframe = removeLargeHatValues(pat_model_nine, new_dataframe)
-pat_model_ten = lm(KneeScore_Patient ~ . - Diagnosis - Race - TibialInsertType - FemoralComponentModel - PatellaModel - TibialTrayModel - TibialTraySize - FemoralComponentType, data = remove_hat_dataframe)
-evaluate(pat_model_ten)
-```
-
-Removing the large hat values decreased the cross validation score.  Perhaps we can find a better model by running BIC on the modified dataframe.
-
-```{r, fig.height=5, fig.width=12}
-n = length(resid(pat_model_ten))
-pat_model_10_bic = step(pat_model_ten, direction = "backward", k = log(n), trace = 0)
-evaluate(pat_model_10_bic)
-```
-
-Despite the reduction in leveraged values the selected model is no better than preceding models.
-
-```{r}
-sample_idx_two = sample(1:nrow(remove_hat_dataframe), 1300)
-train_data_two = remove_hat_dataframe[sample_idx_two, ]
-test_data_two = remove_hat_dataframe[-sample_idx_two, ]
-
-test_mod_10 = rmse(test_data_two$KneeScore_Patient, predict(pat_model_ten, train_data_two))
-train_mod_10 = rmse(train_data_two$KneeScore_Patient, predict(pat_model_ten, train_data_two))
-
-test_10_bic = rmse(test_data_two$KneeScore_Patient, predict(pat_model_10_bic, train_data_two))
-train_10_bic = rmse(train_data_two$KneeScore_Patient, predict(pat_model_10_bic, train_data_two))
-```
-
-| Model         | Train RMSE         | Test RMSE       |
-|---------------|--------------------|-----------------|
-| `Model 10`    | `r train_mod_10`   | `r test_mod_10` |
-| `Model 10 BIC`| `r train_10_bic`   | `r test_10_bic` |
-
-Interestingly, again the models fit on the dataset without leverages fares worse on test RMSE.
+The interaction model is the best to predict KneeScore_Patient scores as it results in the lowest RMSE value.
 
 ## Conclusion
 
-1. Does the satisfactory score is dependent on different age groups?
-2. Score improvement of GPS vs manual placement? 
-3. Does score depends on the gender?
-4. Does GPS improved score based on surgeons?
-5. Are devices from various vendors more suitable for GPS placement or not?
-6. Satisfacory scores depends on BMI, H, W?
-7. Are some vendors more suitable various BMI, H, W?
-8. Is there any dependencies between scores and various replacemnt components?
-9. What components seems to matter the most on the score?
-10. Is there any relationship between components from various vendors and race?
-11. Based on race and gender which has the higher score?
-
+Unfortunately, we are not able to definitavely answer any of the questions we set out to answer.  While we did make incremental improvements with models on both response variables, the $Adjusted R^2$ values never reached levels where we could be confident about predictions.
 
 ## Appendix
 
@@ -573,10 +618,6 @@ evaluate(pat_model_nine)
 ```
 
 ## References
-
-
-
-
 ---
 references:
 - id: fenner2012a
